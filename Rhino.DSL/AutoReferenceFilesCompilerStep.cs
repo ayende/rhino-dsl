@@ -37,6 +37,8 @@ namespace Rhino.DSL
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.MetaProgramming;
 	using Boo.Lang.Compiler.Steps;
+	using Boo.Lang.Parser;
+	using Module=Boo.Lang.Compiler.Ast.Module;
 
 	public delegate TextReader UrlResolverDelegate(string url, string basePath);
 
@@ -50,7 +52,7 @@ namespace Rhino.DSL
 
 		public AutoReferenceFilesCompilerStep()
 			: this((string)null)
-		{	
+		{
 		}
 
 		public AutoReferenceFilesCompilerStep(string baseDirectory)
@@ -67,7 +69,7 @@ namespace Rhino.DSL
 		{
 			if (urlResolver == null)
 			{
-				throw new ArgumentNullException("urlResolver");	
+				throw new ArgumentNullException("urlResolver");
 			}
 
 			this.baseDirectory = baseDirectory;
@@ -76,17 +78,45 @@ namespace Rhino.DSL
 
 		public override void OnImport(Import node)
 		{
-			if (node.Namespace != "file")
-				return;
+			if (node.Namespace == "file")
+				AddFileReference(node);
+			if (node.Namespace == "namespaces")
+				AddNamespaceImports(node);
+		}
 
+		private void AddNamespaceImports(Import node)
+		{
+			RemoveCurrentNode();
+			
+			string url = GetFilePath(node);
+			using(TextReader reader = urlResolver(url, baseDirectory))
+			{
+				BooParsingStep parser = new BooParsingStep();
+				CompilerContext context = new CompilerContext();
+				StringInput input = new StringInput(node.AssemblyReference.Name, reader.ReadToEnd());
+				context.Parameters.Input.Add(input);
+				parser.Initialize(context);
+				parser.Run();
+				Module current = (Module) node.GetAncestor(NodeType.Module);
+				foreach (Module module in context.CompileUnit.Modules)
+				{
+					foreach (Import import in module.Imports)
+					{
+						current.Imports.Add(import);
+					}
+				}
+			}
+		}
+
+		private void AddFileReference(Import node)
+		{
 			RemoveCurrentNode();
 
 			//we may need to preserve this, since it may be used in several compiler cycles.
 			//which will set them to different things
 			CompilerErrorCollection errors = Errors;
 			AssemblyCollection references = Parameters.References;
-			string url = node.AssemblyReference.Name
-				.Replace("~", AppDomain.CurrentDomain.BaseDirectory);
+			string url = GetFilePath(node);
 
 			Assembly assembly;
 			if (assemblyCache.TryGetValue(url, out assembly) == false)
@@ -102,6 +132,12 @@ namespace Rhino.DSL
 			}
 
 			references.Add(assembly);
+		}
+
+		private string GetFilePath(Import node)
+		{
+			return node.AssemblyReference.Name
+				.Replace("~", AppDomain.CurrentDomain.BaseDirectory);
 		}
 
 		private static TextReader ResolveFile(string url, string basePath)

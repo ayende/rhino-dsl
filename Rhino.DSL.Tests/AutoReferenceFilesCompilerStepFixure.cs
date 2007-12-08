@@ -18,7 +18,19 @@ namespace Rhino.DSL.Tests
 
 			asm.EntryPoint.Invoke(null, new object[1] { null });
 
-			Assert.AreEqual("From second file\r\n", consoleOutput.GetStringBuilder().ToString());
+			Assert.Contains(consoleOutput.GetStringBuilder().ToString(), "From second file");
+		}
+
+		[Test]
+		public void CanAddImportsFromAnotherFile()
+		{
+
+			Assembly asm = Compile(@"hasReferenceToAnotherFile.boo", CompilerOutputType.ConsoleApplication);
+
+			asm.EntryPoint.Invoke(null, new object[1] { null });
+
+			Assert.Contains(consoleOutput.GetStringBuilder().ToString(), "Marshal");
+	
 		}
 
 		protected override void AddCompilerSteps(BooCompiler compiler, string filename, CompilerPipeline pipeline)

@@ -77,6 +77,9 @@
     <None Include="AnonymousBaseClass.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="namespacesImports.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="SchedulingDSL\ValidateWebSiteUp.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -26,7 +26,10 @@
     <NAntPath value="" />
   </NAntValidationSettings>
   <EditorManager>
-    <RecentFiles />
+    <RecentFiles>
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:BaseScheduler.cs" caret="2835" scrollPosition="0|69" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:WebSite.cs" caret="280" scrollPosition="0|0" />
+    </RecentFiles>
   </EditorManager>
   <CompletionStatisticsManager />
 </Configuration>
