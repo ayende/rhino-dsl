@@ -42,7 +42,6 @@ namespace Rhino.DSL
 
 	public delegate TextReader UrlResolverDelegate(string url, string basePath);
 
-	[CLSCompliant(false)]
 	public class AutoReferenceFilesCompilerStep : AbstractTransformerCompilerStep
 	{
 		private readonly UrlResolverDelegate urlResolver;
