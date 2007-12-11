@@ -52,6 +52,10 @@
     <Compile Include="AnonymousBaseClassTestFixture.cs" />
     <Compile Include="AutoReferenceFilesCompilerStepFixure.cs" />
     <Compile Include="BaseCompilerTestFixture.cs" />
+    <Compile Include="ExternalDSL\DslExecuter.cs" />
+    <Compile Include="ExternalDSL\ExternalDSLFixture.cs" />
+    <Compile Include="ExternalDSL\ExternalDSLDemo.cs" />
+    <Compile Include="ExternalDSL\Parser.cs" />
     <Compile Include="OrderDSL\BaseOrderActionsDSL.cs" />
     <Compile Include="OrderDSL\Order.cs" />
     <Compile Include="OrderDSL\OrderDSLFixture.cs" />
