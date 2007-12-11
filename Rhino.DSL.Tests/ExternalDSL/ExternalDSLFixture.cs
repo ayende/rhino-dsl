@@ -5,16 +5,6 @@ namespace Rhino.DSL.Tests.ExternalDSL
 	[TestFixture]
 	public class ExternalDSLFixture
 	{
-		#region CustomerStatus enum
-
-		public enum CustomerStatus
-		{
-			Preferred,
-			Regular
-		}
-
-		#endregion
-
 		private readonly string sentence =
 			@"When a customer is preferred and the order exceeds 1000 then apply a .05 discount and apply free shipping.";
 
@@ -99,72 +89,55 @@ namespace Rhino.DSL.Tests.ExternalDSL
 			Assert.AreEqual(4750, order.TotalCost);
 			Assert.AreEqual(ShippingType.Free, order.ShippingType);
 		}
+	}
 
-		#region Nested type: ApplyCommands
+	public class ApplyCommands
+	{
+		private readonly Order order;
 
-		public class ApplyCommands
+		public ApplyCommands(Order order)
 		{
-			private readonly Order order;
-
-			public ApplyCommands(Order order)
-			{
-				this.order = order;
-			}
-
-			public void Discount(double precentage)
-			{
-				order.TotalCost = order.TotalCost - (order.TotalCost * precentage);
-			}
-
-			public void Shipping(ShippingType shipping)
-			{
-				order.ShippingType = shipping;
-			}
+			this.order = order;
 		}
 
-		#endregion
-
-		#region Nested type: Customer
-
-		public class Customer
+		public void Discount(double precentage)
 		{
-			public CustomerStatus CustomerStatus;
-
-			public bool Is(CustomerStatus status)
-			{
-				return CustomerStatus == status;
-			}
+			order.TotalCost = order.TotalCost - (order.TotalCost*precentage);
 		}
 
-		#endregion
-
-		#region Nested type: DemoBook
-
-		public class DemoBook
+		public void Shipping(ShippingType shipping)
 		{
-			public int PageTo(int page)
-			{
-				return page;
-			}
+			order.ShippingType = shipping;
 		}
+	}
 
-		#endregion
+	public class Customer
+	{
+		public CustomerStatus CustomerStatus;
 
-		#region Nested type: Order
-
-		public class Order
+		public bool Is(CustomerStatus status)
 		{
-			public double TotalCost;
-
-			public ShippingType ShippingType;
-
-			public bool Exceeds(double amount)
-			{
-				return TotalCost > amount;
-			}
+			return CustomerStatus == status;
 		}
+	}
 
-		#endregion
+	public class DemoBook
+	{
+		public int PageTo(int page)
+		{
+			return page;
+		}
+	}
+
+	public class Order
+	{
+		public ShippingType ShippingType;
+		public double TotalCost;
+
+		public bool Exceeds(double amount)
+		{
+			return TotalCost > amount;
+		}
 	}
 
 	public enum ShippingType
@@ -173,4 +146,12 @@ namespace Rhino.DSL.Tests.ExternalDSL
 		Cheap,
 		Fast,
 	}
+
+
+	public enum CustomerStatus
+	{
+		Preferred,
+		Regular
+	}
+
 }
