@@ -80,7 +80,6 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 			                new AnonymousBaseClassCompilerStep(typeof (BaseScheduler), "Prepare",
 			                                                   //default namespaces
 			                                                   "Rhino.DSL.Tests.SchedulingDSL"));
-			pipeline.InsertAfter(typeof(ProcessMethodBodiesWithDuckTyping), new PrintBoo());
 		}
 	}
 }
