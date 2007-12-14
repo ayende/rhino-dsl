@@ -1,4 +1,80 @@
 <Configuration>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IDictionary&lt;System.Type,Rhino.DSL.DslEngine&gt;">
+      <Item value="Add" priority="0" />
+      <Item value="ContainsKey" priority="1" />
+      <Item value="TryGetValue" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IDictionary&lt;string,object&gt;">
+      <Item value="TryGetValue" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Rhino.DSL.DslEngine">
+      <Item value="GetFromCache" priority="1" />
+      <Item value="CreateInstance" priority="2" />
+      <Item value="Compile" priority="0" />
+      <Item value="GetTypeForUrl" priority="0" />
+      <Item value="SetInCache" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Rhino.DSL.DslFactory">
+      <Item value="Create" priority="2" />
+      <Item value="Register" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Reflection.Assembly">
+      <Item value="GetType" priority="0" />
+      <Item value="GetTypes" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Rhino.DSL.Tests.DslFactory.MyDslEngine">
+      <Item value="Compile" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.CompilerContext">
+      <Item value="GeneratedAssembly" priority="1" />
+      <Item value="Errors" priority="3" />
+      <Item value="Warnings" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.CompilerErrorCollection">
+      <Item value="Count" priority="1" />
+      <Item value="ToString" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.CompilerWarningCollection">
+      <Item value="ToString" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.AppDomain.CurrentDomain">
+      <Item value="BaseDirectory" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <EditorManager>
+    <RecentFiles>
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:WebSite.cs" caret="0" scrollPosition="0|0" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:BaseScheduler.cs" caret="1410" scrollPosition="0|53" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:SchedulingDSLFixture.cs" caret="308" scrollPosition="0|0" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:DslFactory/f:MyDsl.boo" caret="12" scrollPosition="0|0" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/f:BaseCompilerTestFixture.cs" caret="1263" scrollPosition="0|24" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:DslFactory/f:DslEngineFixture.cs" caret="710" scrollPosition="0|3" />
+      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:DslFactory/f:DslFactoryFixture.cs" caret="6325" scrollPosition="0|153" />
+      <File id="B788F27C-E00A-434A-81AA-1D592E030934/f:DslEngine.cs" caret="2979" scrollPosition="0|67" />
+      <File id="B788F27C-E00A-434A-81AA-1D592E030934/f:DslFactory.cs" caret="1143" scrollPosition="0|6" />
+    </RecentFiles>
+  </EditorManager>
+  <FileStructureView>
+    <AutoScrollToSource>False</AutoScrollToSource>
+    <TrackCaretLocation>False</TrackCaretLocation>
+  </FileStructureView>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <ReFormatCode>
+    <ReorderMembers>False</ReorderMembers>
+    <OptimizeUsings>False</OptimizeUsings>
+    <RemoveRedundantThis>False</RemoveRedundantThis>
+    <ShortenReferences>False</ShortenReferences>
+  </ReFormatCode>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
   <SharedSolutionDisabledTemplatesManager>
     <DisabledTemplates />
   </SharedSolutionDisabledTemplatesManager>
@@ -12,24 +88,4 @@
   <UserSolutionDisabledTemplatesManager>
     <DisabledTemplates />
   </UserSolutionDisabledTemplatesManager>
-  <FileStructureView>
-    <AutoScrollToSource>False</AutoScrollToSource>
-    <TrackCaretLocation>False</TrackCaretLocation>
-  </FileStructureView>
-  <ReFormatCode>
-    <ReorderMembers>False</ReorderMembers>
-    <OptimizeUsings>False</OptimizeUsings>
-    <RemoveRedundantThis>False</RemoveRedundantThis>
-    <ShortenReferences>False</ShortenReferences>
-  </ReFormatCode>
-  <NAntValidationSettings>
-    <NAntPath value="" />
-  </NAntValidationSettings>
-  <EditorManager>
-    <RecentFiles>
-      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:BaseScheduler.cs" caret="2835" scrollPosition="0|69" />
-      <File id="9BCD2185-4653-45D7-99B2-3043E55A6746/d:SchedulingDSL/f:WebSite.cs" caret="280" scrollPosition="0|0" />
-    </RecentFiles>
-  </EditorManager>
-  <CompletionStatisticsManager />
 </Configuration>

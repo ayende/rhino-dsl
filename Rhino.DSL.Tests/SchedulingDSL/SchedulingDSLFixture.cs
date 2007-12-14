@@ -1,42 +1,29 @@
 namespace Rhino.DSL.Tests.SchedulingDSL
 {
-	using System;
-	using System.Reflection;
-	using Boo.Lang;
-	using Boo.Lang.Compiler;
-	using Boo.Lang.Compiler.Ast;
-	using Boo.Lang.Compiler.MetaProgramming;
-	using Boo.Lang.Compiler.Steps;
-	using MbUnit.Framework;
+    using System;
+    using MbUnit.Framework;
 
-	[TestFixture]
-	public class SchedulingDSLFixture : BaseCompilerTestFixture
+    [TestFixture]
+    public class SchedulingDSLFixture : BaseDslFixture<SchedulingDslEngine, BaseScheduler>
 	{
-		private Assembly assembly;
-
-		public override void SetUp()
-		{
-			base.SetUp();
-			assembly = Compile(@"SchedulingDSL\validateWebSiteUp.boo");
-		}
 
 		[Test]
 		public void CanCompileFile()
 		{
-			Assert.IsNotNull(assembly);
+            Assert.IsNotNull(factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo"));
 		}
 
 		[Test]
 		public void CanCreateInstanceOfScheduler()
 		{
-			object instance = assembly.CreateInstance("validateWebSiteUp");
+			object instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
 			Assert.IsNotNull(instance);
 		}
 
 		[Test]
 		public void PreparingInstanceWillCauseValuesToFillFromDSL()
 		{
-			BaseScheduler instance = (BaseScheduler) assembly.CreateInstance("validateWebSiteUp");
+            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
 			instance.Prepare();
 
 			Assert.AreEqual(instance.TaskName, "warn if website is not alive");
@@ -47,7 +34,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 		[Test]
 		public void WhenClause_WillRunCodeFromDSL()
 		{
-			BaseScheduler instance = (BaseScheduler) assembly.CreateInstance("validateWebSiteUp");
+            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
 			instance.Prepare();
 
 			WebSite.aliveValue = true; // will cause when to return false
@@ -61,7 +48,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 		[Test]
 		public void WhenClause_WhenReturnsTrue_WillCallAction()
 		{
-			BaseScheduler instance = (BaseScheduler) assembly.CreateInstance("validateWebSiteUp");
+			BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
 			instance.Prepare();
 
 			WebSite.aliveValue = false; // will cause when to return true
@@ -72,14 +59,6 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 
 			Assert.AreEqual("admin@example.org", instance.WhoToNotify);
 			Assert.AreEqual("server down!", instance.NotifyMessage);
-		}
-
-		protected override void AddCompilerSteps(BooCompiler compiler, string filename, CompilerPipeline pipeline)
-		{
-			pipeline.Insert(1,
-			                new AnonymousBaseClassCompilerStep(typeof (BaseScheduler), "Prepare",
-			                                                   //default namespaces
-			                                                   "Rhino.DSL.Tests.SchedulingDSL"));
 		}
 	}
 }

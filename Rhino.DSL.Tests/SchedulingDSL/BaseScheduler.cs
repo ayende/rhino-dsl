@@ -64,13 +64,6 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 			);
 		}
 
-		public void when(ConditionDelegate conditionDelegate)
-		{
-			this.condition = conditionDelegate;
-		}
-
-		
-
 		public void notify(string who, string message)
 		{
 			this.whoToNotify = who;

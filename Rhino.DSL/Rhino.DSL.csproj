@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="AnonymousBaseClassCompilerStep.cs" />
     <Compile Include="AutoReferenceFilesCompilerStep.cs" />
+    <Compile Include="DslEngine.cs" />
+    <Compile Include="DslFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
