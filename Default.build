@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project 
+		 xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<ProjectName>Rhino.DSL</ProjectName>
+		<ShortName>rhino-DSL</ShortName>
+		<SolutionFile>Rhino.DSL.sln</SolutionFile>
+		<FlattenZipFile>True</FlattenZipFile>
+		<SectionId>-2</SectionId>
+		<Version>0.8.0</Version>
+		<ExtraInfo></ExtraInfo>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<AssemblyInfo Include="Item">
+			<File>$(MSBuildProjectDirectory)\Rhino.DSL\AssemblyInfo.cs</File>
+		</AssemblyInfo>
+		<AssemblyInfo Include="Item">
+			<File>$(MSBuildProjectDirectory)\Rhino.DSL.Tests\AssemblyInfo.cs</File>
+		</AssemblyInfo>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<TestAssembly Include="$(OutDir)Rhino.DSL.Tests.dll"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ZipFiles Include="$(OutDir)Rhino.DSL.dll"/>
+		<ZipFiles Include="$(OutDir)Rhino.DSL.xml"/>
+	</ItemGroup>
+	
+	
+	<Import Project="$(MSBuildProjectDirectory)\..\Common.build.xml"/>
+</Project>

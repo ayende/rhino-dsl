@@ -5,19 +5,51 @@ namespace Rhino.DSL
     using System.Reflection;
     using System.IO;
 
+    /// <summary>
+    /// Manage the creation of DSL instances, cache and creates them.
+    /// </summary>
     public class DslFactory
     {
         private readonly IDictionary<Type, DslEngine> typeToDslEngine = new Dictionary<Type, DslEngine>();
+        private string baseDirectory;
 
+        /// <summary>
+        /// The base directory to read all the relative url from.
+        /// </summary>
+        public string BaseDirectory
+        {
+            get { return baseDirectory; }
+            set { baseDirectory = value; }
+        }
+
+        ///<summary>
+        /// Register a new DSL engine that is tied to a specific base type
+        ///</summary>
         public void Register<TDslBase>(DslEngine engine)
         {
             typeToDslEngine.Add(typeof(TDslBase), engine);
         }
 
+        /// <summary>
+        /// Create a new DSL instance
+        /// </summary>
+        /// <typeparam name="TDslBase">The base type of the DSL</typeparam>
+        /// <param name="url">The url to read the DSL file from</param>
+        /// <param name="parameters">optional ctor parameters</param>
+        /// <returns>The dsl instance</returns>
         public TDslBase Create<TDslBase>(string url, params object[] parameters)
         {
+            url = Path.Combine(BaseDirectory, url);
             return Create<TDslBase>(new Uri(Path.GetFullPath(url)), parameters);
         }
+
+        /// <summary>
+        /// Create a new DSL instance
+        /// </summary>
+        /// <typeparam name="TDslBase">The base type of the DSL</typeparam>
+        /// <param name="url">The url to read the DSL file from</param>
+        /// <param name="parameters">optional ctor parameters</param>
+        /// <returns>The dsl instance</returns>
         public TDslBase Create<TDslBase>(Uri url, params object[] parameters)
         {
             DslEngine engine;
@@ -61,6 +93,9 @@ namespace Rhino.DSL
             return urls.ToArray();
         }
 
+        /// <summary>
+        /// Check if there was a DSL registered for this base type.
+        /// </summary>
         public bool IsRegistered<TDslBase>()
         {
             return typeToDslEngine.ContainsKey(typeof(TDslBase));

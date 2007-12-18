@@ -20,6 +20,8 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 
 		public void Run()
 		{
+            //in real code, we would probably use this method
+            //to register this class in a scheduling engine
 			if (condition())
 			{
 				actionExecuted = true;

@@ -40,8 +40,22 @@ namespace Rhino.DSL
 	using Boo.Lang.Parser;
 	using Module=Boo.Lang.Compiler.Ast.Module;
 
+    /// <summary>
+    /// This delegate is used to abstract getting the data from a url.
+    /// This allows us to plug in more smarts when needed (for instance, hooking into the 
+    /// Castle.Resources system)
+    /// </summary>
 	public delegate TextReader UrlResolverDelegate(string url, string basePath);
 
+    /// <summary>
+    /// This compiler step will auotmatically compiler and reference all files specified in import clauses such as:
+    /// import file from "[file name]"
+    /// 
+    /// Another option is:
+    /// import namespaces from "[file name]"
+    /// 
+    /// In which case all the namespaces defined in that file will be imported into the current file
+    /// </summary>
 	public class AutoReferenceFilesCompilerStep : AbstractTransformerCompilerStep
 	{
 		private readonly UrlResolverDelegate urlResolver;
@@ -49,21 +63,37 @@ namespace Rhino.DSL
 
 		private readonly string baseDirectory;
 
+        /// <summary>
+        /// Create a new instance of <seealso cref="AutoReferenceFilesCompilerStep"/>
+        /// </summary>
 		public AutoReferenceFilesCompilerStep()
 			: this((string)null)
 		{
 		}
 
+        /// <summary>
+        /// Create a new instance of <seealso cref="AutoReferenceFilesCompilerStep"/>
+        /// </summary>
+        /// <param name="baseDirectory">The base directory to resolve files from</param>
 		public AutoReferenceFilesCompilerStep(string baseDirectory)
 			: this(baseDirectory, ResolveFile)
 		{
 		}
 
+        /// <summary>
+        /// Create a new instance of <seealso cref="AutoReferenceFilesCompilerStep"/>
+        /// </summary>
+        /// <param name="urlResolver">The url resolver to use</param>
 		public AutoReferenceFilesCompilerStep(UrlResolverDelegate urlResolver)
 			: this(null, urlResolver)
 		{
 		}
 
+        /// <summary>
+        /// Create a new instance of <seealso cref="AutoReferenceFilesCompilerStep"/>
+        /// </summary>
+        /// <param name="baseDirectory">The base directory to resolve files from</param>
+        /// <param name="urlResolver">The url resolver to use</param>
 		public AutoReferenceFilesCompilerStep(string baseDirectory, UrlResolverDelegate urlResolver)
 		{
 			if (urlResolver == null)
@@ -75,6 +105,9 @@ namespace Rhino.DSL
 			this.urlResolver = urlResolver;
 		}
 
+        /// <summary>
+        /// Add the desired import behavior.
+        /// </summary>
 		public override void OnImport(Import node)
 		{
 			if (node.Namespace == "file")
@@ -133,7 +166,7 @@ namespace Rhino.DSL
 			references.Add(assembly);
 		}
 
-		private string GetFilePath(Import node)
+		private static string GetFilePath(Import node)
 		{
 			return node.AssemblyReference.Name
 				.Replace("~", AppDomain.CurrentDomain.BaseDirectory);
@@ -203,6 +236,9 @@ namespace Rhino.DSL
 			return cloned;
 		}
 
+        /// <summary>
+        /// Run the current compiler step
+        /// </summary>
 		public override void Run()
 		{
 			Visit(CompileUnit);

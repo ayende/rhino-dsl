@@ -1,5 +1,6 @@
 namespace Rhino.DSL.Tests
 {
+    using System;
     using MbUnit.Framework;
 
     public class BaseDslFixture<TDslEngine, TDslBase>
@@ -11,6 +12,7 @@ namespace Rhino.DSL.Tests
         public void SetUp()
         {
             factory = new DslFactory();
+            factory.BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             this.factory.Register<TDslBase>(new TDslEngine());
         }
 

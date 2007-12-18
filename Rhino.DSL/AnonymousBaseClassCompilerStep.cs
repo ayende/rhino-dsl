@@ -7,6 +7,10 @@ namespace Rhino.DSL
 	using Boo.Lang.Compiler.Steps;
 	using Module=Boo.Lang.Compiler.Ast.Module;
 
+    /// <summary>
+    /// Takes all the code that exists in a module's global section and put it in a specificied
+    /// method of a class. Allow easy handling of the Anonymous Base Class pattern 
+    /// </summary>
 	public class AnonymousBaseClassCompilerStep : AbstractCompilerStep
 	{
 		private readonly string[] namespaces;
@@ -14,6 +18,12 @@ namespace Rhino.DSL
 		private readonly string methodName;
 
 
+        /// <summary>
+        /// Create new instance of <seealso cref="AnonymousBaseClassCompilerStep"/>
+        /// </summary>
+        /// <param name="baseClass">The base class that will be used</param>
+        /// <param name="methodName">The name of the method that will get all the code from globals moved to it.</param>
+        /// <param name="namespaces">Namespaces that would be automatically imported into all modules</param>
 		public AnonymousBaseClassCompilerStep(Type baseClass, string methodName, params string[] namespaces)
 		{
 			this.namespaces = namespaces;
@@ -21,6 +31,9 @@ namespace Rhino.DSL
 			this.methodName = methodName;
 		}
 
+		///<summary>
+		/// Run this compiler step
+		///</summary>
 		public override void Run()
 		{
 			if (Context.References.Contains(baseClass.Assembly) == false)
@@ -66,6 +79,9 @@ namespace Rhino.DSL
 			}
 		}
 
+        /// <summary>
+        /// Allow a derived class to perform additional operations on the newly created type definition.
+        /// </summary>
 		protected virtual void ExtendBaseClass(TypeDefinition definition)
 		{
 

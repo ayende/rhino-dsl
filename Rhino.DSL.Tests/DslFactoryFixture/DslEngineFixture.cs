@@ -20,7 +20,8 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
         [Test]
         public void When_DSL_engine_is_asked_to_create_a_DSL_it_will_compile_and_return_the_compiler_context()
         {
-            CompilerContext compilerContext = engine.Compile(new Uri(Path.GetFullPath(@"DslFactoryFixture\MyDsl.boo")));
+            string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\MyDsl.boo"));
+            CompilerContext compilerContext = engine.Compile(new Uri(path));
             Assert.AreEqual(0, compilerContext.Errors.Count);
             Assert.IsNotNull(compilerContext.GeneratedAssembly);
         }

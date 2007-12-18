@@ -13,10 +13,13 @@ namespace Rhino.DSL.Tests
 	{
 		protected StringWriter consoleOutput;
 		private TextWriter oldConsole;
+	    private string oldCurrentDir;
 
-		[SetUp]
+	    [SetUp]
 		public virtual void SetUp()
 		{
+		    oldCurrentDir = Environment.CurrentDirectory;
+	        Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			oldConsole = Console.Out;
 			consoleOutput = new StringWriter();
 			Console.SetOut(consoleOutput);
@@ -25,6 +28,7 @@ namespace Rhino.DSL.Tests
 		[TearDown]
 		public void TearDown()
 		{
+		    Environment.CurrentDirectory = oldCurrentDir;
 			Debug.WriteLine(consoleOutput.GetStringBuilder().ToString());
 			Console.SetOut(oldConsole);
 		}
