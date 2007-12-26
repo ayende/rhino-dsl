@@ -94,6 +94,9 @@
     <None Include="AnonymousBaseClass.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="anotherFile2.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="DslFactoryFixture\MyDsl.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

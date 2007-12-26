@@ -180,7 +180,9 @@ namespace Rhino.DSL
 
 		private Assembly CompileAssembly(Node node, string url, CompilerErrorCollection errors)
 		{
-			CompilerContext result = Compile(url);
+		    CompilerContext oldContext = Context;
+		    CompilerContext result = Compile(url);
+		    _context = oldContext;
 			if (result.Errors.Count > 0)
 			{
 				errors.Add(new CompilerError(node.LexicalInfo, "Failed to add a file reference"));
