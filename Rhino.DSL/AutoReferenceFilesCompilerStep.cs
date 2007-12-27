@@ -197,7 +197,7 @@ namespace Rhino.DSL
 
 		private CompilerContext Compile(string url)
 		{
-			TextReader input = urlResolver(url, baseDirectory);
+			TextReader input = urlResolver(url, baseDirectory ?? Path.GetDirectoryName(url));
 			CompilerParameters parameters = SafeCloneParameters(Parameters);
 			parameters.Input.Add(new ReaderInput(url, input));
 			BooCompiler compiler = new BooCompiler(parameters);
