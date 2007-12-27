@@ -2,8 +2,8 @@ namespace Rhino.DSL.Tests.OrderDSL
 {
 	using System.Collections;
 	using System.Collections.Specialized;
+	using Boo.Lang;
 	using Boo.Lang.Compiler.Ast;
-	using Boo.Lang.Compiler.MetaProgramming;
 
 	public abstract class BaseOrderActionsDSL
 	{
