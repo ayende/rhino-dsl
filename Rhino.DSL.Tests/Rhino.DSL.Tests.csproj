@@ -54,6 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousBaseClassTestFixture.cs" />
+    <None Include="AutoImport.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Include="AutoImportTextFixture.cs" />
     <Compile Include="AutoReferenceFilesCompilerStepFixure.cs" />
     <Compile Include="BaseCompilerTestFixture.cs" />
     <Compile Include="BaseDslFixture.cs" />

@@ -39,7 +39,8 @@ namespace Rhino.DSL
         /// <returns>The dsl instance</returns>
         public TDslBase Create<TDslBase>(string url, params object[] parameters)
         {
-            url = Path.Combine(BaseDirectory, url);
+            string directory = BaseDirectory ?? "";
+            url = Path.Combine(directory, url);
             return Create<TDslBase>(new Uri(Path.GetFullPath(url)), parameters);
         }
 
