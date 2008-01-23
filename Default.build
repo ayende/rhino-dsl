@@ -10,14 +10,15 @@
 		<SectionId>-2</SectionId>
 		<Version>0.8.0</Version>
 		<ExtraInfo></ExtraInfo>
+		<ClsCompliant>False</ClsCompliant>
 	</PropertyGroup>
 	
 	<ItemGroup>
 		<AssemblyInfo Include="Item">
-			<File>$(MSBuildProjectDirectory)\Rhino.DSL\AssemblyInfo.cs</File>
+			<File>$(MSBuildProjectDirectory)\Rhino.DSL\Properties\AssemblyInfo.cs</File>
 		</AssemblyInfo>
 		<AssemblyInfo Include="Item">
-			<File>$(MSBuildProjectDirectory)\Rhino.DSL.Tests\AssemblyInfo.cs</File>
+			<File>$(MSBuildProjectDirectory)\Rhino.DSL.Tests\Properties\AssemblyInfo.cs</File>
 		</AssemblyInfo>
 	</ItemGroup>
 	
