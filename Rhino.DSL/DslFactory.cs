@@ -53,6 +53,8 @@ namespace Rhino.DSL
         /// <returns></returns>
         public TDslBase[] CreateAll<TDslBase>(string parentUrl, params object[] parameters)
         {
+            string directory = BaseDirectory ?? "";
+            parentUrl = Path.Combine(directory, parentUrl);
             DslEngine engine;
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
                 throw new InvalidOperationException("Could not find an engine to process type: " + typeof(TDslBase));

@@ -10,12 +10,14 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     [TestFixture]
     public class DslFixtureIntegrationFixture
     {
-        private readonly string path = @"DslFactoryFixture/Integration.boo";
+        private readonly string path =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\Integration.boo");
 
         [Test]
         public void When_file_is_changed_will_automatically_get_new_version()
         {
             DslFactory factory = new DslFactory();
+            factory.BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             factory.Register<DemoDslBase>(new DemoDslEngine());
             File.WriteAllText(path, "print 'test'");
             

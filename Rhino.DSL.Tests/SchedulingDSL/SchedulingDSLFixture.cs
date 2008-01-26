@@ -9,7 +9,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
         [Test]
         public void CanGetAllDslInstancesInDirectory()
         {
-            BaseScheduler[] all = factory.CreateAll<BaseScheduler>(@"SchedulingDSL");
+            BaseScheduler[] all = factory.CreateAll<BaseScheduler>(@"SchedulingDSL\");
             Assert.AreEqual(2, all.Length);
         }
 
