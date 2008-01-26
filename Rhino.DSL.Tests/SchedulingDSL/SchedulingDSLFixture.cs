@@ -6,8 +6,14 @@ namespace Rhino.DSL.Tests.SchedulingDSL
     [TestFixture]
     public class SchedulingDSLFixture : BaseDslFixture<SchedulingDslEngine, BaseScheduler>
 	{
+        [Test]
+        public void CanGetAllDslInstancesInDirectory()
+        {
+            BaseScheduler[] all = factory.CreateAll<BaseScheduler>(@"SchedulingDSL");
+            Assert.AreEqual(2, all.Length);
+        }
 
-		[Test]
+        [Test]
 		public void CanCompileFile()
 		{
             Assert.IsNotNull(factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo"));
@@ -23,7 +29,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 		[Test]
 		public void PreparingInstanceWillCauseValuesToFillFromDSL()
 		{
-            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
+            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteDown.boo");
 			instance.Prepare();
 
 			Assert.AreEqual(instance.TaskName, "warn if website is not alive");
@@ -34,7 +40,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 		[Test]
 		public void WhenClause_WillRunCodeFromDSL()
 		{
-            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
+            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteDown.boo");
 			instance.Prepare();
 
 			WebSite.aliveValue = true; // will cause when to return false
@@ -48,7 +54,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
 		[Test]
 		public void WhenClause_WhenReturnsTrue_WillCallAction()
 		{
-			BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteUp.boo");
+            BaseScheduler instance = factory.Create<BaseScheduler>(@"SchedulingDSL\validateWebSiteDown.boo");
 			instance.Prepare();
 
 			WebSite.aliveValue = false; // will cause when to return true

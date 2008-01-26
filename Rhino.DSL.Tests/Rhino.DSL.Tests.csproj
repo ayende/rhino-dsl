@@ -110,6 +110,9 @@
     <None Include="OrderDSL\OrderBusinessRules.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="SchedulingDSL\ValidateWebSiteDown.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="SchedulingDSL\ValidateWebSiteUp.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

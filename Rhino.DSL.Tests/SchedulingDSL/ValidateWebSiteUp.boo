@@ -1,6 +1,6 @@
-task "warn if website is not alive":
+task "warn if website is alive":
 	every 3.Minutes() 
 	starting now
-	when WebSite("http://example.org").IsAlive == false
+	when WebSite("http://example.org").IsAlive
 	then:
-		notify "admin@example.org", "server down!"
+		notify "admin@example.org", "server up!"
