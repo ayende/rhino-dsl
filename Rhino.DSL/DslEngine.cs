@@ -12,9 +12,10 @@ namespace Rhino.DSL
     /// Base class for DSL engines, handles most of the routine tasks that a DSL
     /// engine needs to do. Compilation, caching, creation, etc.
     /// </summary>
-    public abstract class DslEngine
+    public abstract class DslEngine  : IDisposable 
     {
         private readonly IDictionary<Uri, Type> urlToTypeCache = new Dictionary<Uri, Type>();
+        private readonly Dictionary<string, FileSystemWatcher> pathToFileWatchers = new Dictionary<string, FileSystemWatcher>();
 
         /// <summary>
         /// Try to get a cached type for this URL.
@@ -145,6 +146,70 @@ namespace Rhino.DSL
                 urls.Add(new Uri(url));
             }
             return urls.ToArray();
+        }
+
+        /// <summary>
+        /// Will call the action delegate when any of the specified urls are changed.
+        /// Note that for a single logical change several calls may be made.
+        /// </summary>
+        /// <param name="urls">The urls.</param>
+        /// <param name="action">The action.</param>
+        public void NotifyOnChange(IEnumerable<Uri> urls, Action<Uri> action)
+        {
+            lock (pathToFileWatchers)
+            {
+                string[] commonPaths = GatherCommonPaths(urls);
+                foreach (string path in commonPaths)
+                {
+                    FileSystemWatcher watcher;
+                    if(pathToFileWatchers.TryGetValue(path, out watcher)==false)
+                    {
+                        pathToFileWatchers[path] = watcher = new FileSystemWatcher(path, FileNameFormat);
+                        watcher.EnableRaisingEvents = true;
+                    }
+                    watcher.Changed += delegate(object sender, FileSystemEventArgs e)
+                    {
+                        action(new Uri(e.FullPath));
+                    };
+                }
+            }
+        }
+
+        private static string[] GatherCommonPaths(IEnumerable<Uri> urls)
+        {
+            List<string> paths = new List<string>();
+            foreach (Uri url in urls)
+            {
+                string path = Path.GetDirectoryName(url.AbsolutePath);
+                if(paths.Contains(path)==false)
+                    paths.Add(path);
+            }
+            return paths.ToArray();
+        }
+
+        ///<summary>
+        ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///</summary>
+        ///<filterpriority>2</filterpriority>
+        public void Dispose()
+        {
+            lock (pathToFileWatchers)
+           {
+               foreach (FileSystemWatcher watcher in pathToFileWatchers.Values)
+               {
+                   watcher.EnableRaisingEvents = false;
+                   watcher.Dispose();
+               }
+           }
+        }
+
+        /// <summary>
+        /// Removes the url for the from cache.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        public void RemoveFromCache(Uri url)
+        {
+            urlToTypeCache.Remove(url);
         }
     }
 }

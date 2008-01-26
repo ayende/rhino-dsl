@@ -33,6 +33,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             context.GeneratedAssembly = assembly;
             parentDirectory = Path.GetDirectoryName(testUrl.AbsolutePath);
             SetupResult.For(mockedDslEngine.GetMatchingUrlsIn(parentDirectory)).Return(new Uri[] {testUrl});
+            SetupResult.For(mockedDslEngine.FileNameFormat).Return("*.boo");
         }
 
         [Test]

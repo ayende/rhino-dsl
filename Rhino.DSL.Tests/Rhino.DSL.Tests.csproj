@@ -63,6 +63,7 @@
     <Compile Include="BaseDslFixture.cs" />
     <Compile Include="DslFactoryFixture\DslEngineFixture.cs" />
     <Compile Include="DslFactoryFixture\DslFactoryFixture.cs" />
+    <Compile Include="DslFactoryFixture\DslFixtureIntegrationFixture.cs" />
     <Compile Include="ExternalDSL\DslExecuter.cs" />
     <Compile Include="ExternalDSL\ExternalDSLFixture.cs" />
     <Compile Include="ExternalDSL\ExternalDSLDemo.cs" />
