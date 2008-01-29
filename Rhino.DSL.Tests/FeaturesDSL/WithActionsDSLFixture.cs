@@ -12,6 +12,13 @@ namespace Rhino.DSL.Tests.FeaturesDSL
             string action = base.factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo").Action;
             Assert.AreEqual("/action/with/name", action);
         }
+
+        [Test]
+        public void CanPassParametersViaCtor()
+        {
+            string name = base.factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo", "test ctor").Name;
+            Assert.AreEqual("test ctor", name);
+        }
     }
 
     public class WithActionsDslEngine : DslEngine
@@ -27,6 +34,13 @@ namespace Rhino.DSL.Tests.FeaturesDSL
 
     public abstract class WithAction
     {
+        protected WithAction(string name)
+        {
+            this.Name = name;
+        }
+
+        public string Name;
+
         public abstract string Action { get; }
         public abstract string Execute();
     }
