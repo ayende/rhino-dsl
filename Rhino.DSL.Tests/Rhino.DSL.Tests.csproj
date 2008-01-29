@@ -68,6 +68,7 @@
     <Compile Include="ExternalDSL\ExternalDSLFixture.cs" />
     <Compile Include="ExternalDSL\ExternalDSLDemo.cs" />
     <Compile Include="ExternalDSL\Parser.cs" />
+    <Compile Include="FeaturesDSL\WithActionsDSLFixture.cs" />
     <Compile Include="OrderDSL\BaseOrderActionsDSL.cs" />
     <Compile Include="OrderDSL\Order.cs" />
     <Compile Include="OrderDSL\OrderActionsDslEngine.cs" />
@@ -103,6 +104,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="DslFactoryFixture\MyDsl.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="FeaturesDSL\HasAction.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="namespacesImports.boo">
