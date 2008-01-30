@@ -19,6 +19,17 @@ namespace Rhino.DSL.Tests.FeaturesDSL
             string name = base.factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo", "test ctor").Name;
             Assert.AreEqual("test ctor", name);
         }
+
+        [Test]
+        public void CanUseSymbols()
+        {
+            WithAction action = factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo", "test ctor");
+            using(ConsoleRecorder recorder = new ConsoleRecorder())
+            {
+                action.Execute();
+                recorder.AssertEquals("test\r\n");
+            }
+        }
     }
 
     public class WithActionsDslEngine : DslEngine
@@ -29,6 +40,7 @@ namespace Rhino.DSL.Tests.FeaturesDSL
                             new AnonymousBaseClassCompilerStep(typeof(WithAction), "Execute",
                                                                //default namespaces
                                                                "Rhino.DSL.Tests.FeaturesDSL"));
+            pipeline.Insert(2, new UseSymbolsStep());
         }
     }
 

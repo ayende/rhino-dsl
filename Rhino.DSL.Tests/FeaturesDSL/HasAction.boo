@@ -1,3 +1,3 @@
 action "/action/with/name"
 
-print "test"
+print @test

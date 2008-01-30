@@ -61,6 +61,7 @@
     <Compile Include="AutoReferenceFilesCompilerStepFixure.cs" />
     <Compile Include="BaseCompilerTestFixture.cs" />
     <Compile Include="BaseDslFixture.cs" />
+    <Compile Include="ConsoleRecorder.cs" />
     <Compile Include="DslFactoryFixture\DslEngineFixture.cs" />
     <Compile Include="DslFactoryFixture\DslFactoryFixture.cs" />
     <Compile Include="DslFactoryFixture\DslFixtureIntegrationFixture.cs" />
