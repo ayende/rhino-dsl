@@ -7,6 +7,13 @@ namespace Rhino.DSL.Tests.FeaturesDSL
     public class WithActionsDSLFixture : BaseDslFixture<WithActionsDslEngine,WithAction>
     {
         [Test]
+        public void CanTryToCreateNonExistingScript()
+        {
+            WithAction action = factory.TryCreate<WithAction>(@"FeaturesDSL/DoesNotExists.boo");
+            Assert.IsNull(action);
+        }
+
+        [Test]
         public void CanUseGeneratedProperty()
         {
             string action = base.factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo").Action;
@@ -46,6 +53,11 @@ namespace Rhino.DSL.Tests.FeaturesDSL
 
     public abstract class WithAction
     {
+        protected WithAction()
+        {
+            
+        }
+
         protected WithAction(string name)
         {
             this.Name = name;

@@ -45,6 +45,20 @@ namespace Rhino.DSL
         }
 
         /// <summary>
+        /// Create a new DSL instance
+        /// </summary>
+        /// <typeparam name="TDslBase">The base type of the DSL</typeparam>
+        /// <param name="url">The url to read the DSL file from</param>
+        /// <param name="parameters">optional ctor parameters</param>
+        /// <returns>The dsl instance</returns>
+        public TDslBase TryCreate<TDslBase>(string url, params object[] parameters)
+        {
+            string directory = BaseDirectory ?? "";
+            url = Path.Combine(directory, url);
+            return TryCreate<TDslBase>(new Uri(Path.GetFullPath(url)), parameters);
+        }
+
+        /// <summary>
         /// Creates instances of all the DSL that are located directly under the parent URL.
         /// </summary>
         /// <typeparam name="TDslBase">The type of the DSL base.</typeparam>
@@ -75,6 +89,31 @@ namespace Rhino.DSL
         /// <returns>The dsl instance</returns>
         public TDslBase Create<TDslBase>(Uri url, params object[] parameters)
         {
+            return CreateInternal<TDslBase>(ScriptNotFoundBehavior.Throw, url, parameters);
+        }
+
+        /// <summary>
+        /// Tries to create a new DSL instance, if it exists.
+        /// If it doesn't, return null.
+        /// </summary>
+        /// <typeparam name="TDslBase">The base type of the DSL</typeparam>
+        /// <param name="url">The url to read the DSL file from</param>
+        /// <param name="parameters">optional ctor parameters</param>
+        /// <returns>The dsl instance</returns>
+        public TDslBase TryCreate<TDslBase>(Uri url, params object[] parameters)
+        {
+            return CreateInternal<TDslBase>(ScriptNotFoundBehavior.ReturnNull, url, parameters);
+        }
+
+
+        private enum ScriptNotFoundBehavior
+        {
+            Throw,
+            ReturnNull
+        }
+
+        private TDslBase CreateInternal<TDslBase>(ScriptNotFoundBehavior notFoundBehavior, Uri url, object[] parameters)
+        {
             DslEngine engine;
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
                 throw new InvalidOperationException("Could not find an engine to process type: " + typeof(TDslBase));
@@ -82,6 +121,17 @@ namespace Rhino.DSL
             if (type == null)
             {
                 Uri[] urls = GetUrls(engine, Path.GetDirectoryName(url.AbsolutePath));
+                if (Array.IndexOf(urls, url) == -1)
+                {
+                    if (notFoundBehavior == ScriptNotFoundBehavior.Throw)
+                    {
+                        throw new InvalidOperationException("Could not find DSL script: " + url);
+                    }
+                    else
+                    {
+                        return default(TDslBase);
+                    }
+                }
                 Assembly assembly = engine.Compile(urls).GeneratedAssembly;
                 RegisterBatchInCache(engine, urls, assembly);
                 //find the type that we searched for
