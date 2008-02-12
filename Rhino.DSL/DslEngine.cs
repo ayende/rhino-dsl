@@ -145,7 +145,19 @@ namespace Rhino.DSL
             {
                 urls.Add(new Uri(url));
             }
+            urls.Sort(CompareUrls);
             return urls.ToArray();
+        }
+
+        /// <summary>
+        /// Compares the two urls
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns></returns>
+        protected virtual int CompareUrls(Uri x, Uri y)
+        {
+            return x.AbsolutePath.CompareTo(y.AbsolutePath);
         }
 
         /// <summary>
