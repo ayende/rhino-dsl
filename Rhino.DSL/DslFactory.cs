@@ -12,6 +12,12 @@ namespace Rhino.DSL
     {
         private readonly IDictionary<Type, DslEngine> typeToDslEngine = new Dictionary<Type, DslEngine>();
         private string baseDirectory;
+        /// <summary>
+        /// This is used to mark urls that should be compiled on their own
+        /// usually this means scripts that has been changed after they were 
+        /// compiled
+        /// </summary>
+        private readonly List<Uri> standAloneCompilation = new List<Uri>();
 
         /// <summary>
         /// The base directory to read all the relative url from.
@@ -105,6 +111,18 @@ namespace Rhino.DSL
             return CreateInternal<TDslBase>(ScriptNotFoundBehavior.ReturnNull, url, parameters);
         }
 
+        /// <summary>
+        /// Occurs when a compilation is completed
+        /// Useful to track how many assemblies has been loaded
+        /// by the DslFactory
+        /// </summary>
+        public event EventHandler Compilation = delegate { };
+        /// <summary>
+        /// Occurs when recompilation of a script is completed.
+        /// Useful to track how many assemblies has been loaded by
+        /// the DslFactory
+        /// </summary>
+        public event EventHandler Recompilation = delegate { };
 
         private enum ScriptNotFoundBehavior
         {
@@ -120,7 +138,8 @@ namespace Rhino.DSL
             Type type = engine.GetFromCache(url);
             if (type == null)
             {
-                Uri[] urls = GetUrls(engine, Path.GetDirectoryName(url.AbsolutePath));
+                bool recompilation;
+                Uri[] urls = GetUrls(engine, url, out recompilation);
                 if (Array.IndexOf(urls, url) == -1)
                 {
                     if (notFoundBehavior == ScriptNotFoundBehavior.Throw)
@@ -138,21 +157,52 @@ namespace Rhino.DSL
                 //we may have a race condition with the cache, so we force
                 //it to go through the assemly instead of the cache
                 type = engine.GetTypeForUrl(assembly, url);
+                RaiseCompilationEvent(recompilation);
             }
             return (TDslBase)engine.CreateInstance(type, parameters);
         }
 
-        private static void RegisterBatchInCache(DslEngine engine, IEnumerable<Uri> urls, Assembly compile)
+        private void RaiseCompilationEvent(bool recompilation)
+        {
+            Compilation(this, EventArgs.Empty);
+            if (recompilation)
+            {
+                Recompilation(this, EventArgs.Empty);
+            }
+        }
+
+        private Uri[] GetUrls(DslEngine engine, Uri url, out bool recompilation)
+        {
+            Uri[] urls;
+            // we need to compile this separatedly, instead of
+            // in a batch. This is usually happening when a script
+            // has changed
+            recompilation = false;
+            if (standAloneCompilation.Contains(url))
+            {
+                standAloneCompilation.Remove(url);
+                urls = new Uri[] { url };
+                recompilation = true;
+            }
+            else
+            {
+                urls = GetUrls(engine, Path.GetDirectoryName(url.AbsolutePath));
+            }
+            return urls;
+        }
+
+        private void RegisterBatchInCache(DslEngine engine, IEnumerable<Uri> urls, Assembly compiledAssembly)
         {
             foreach (Uri batchUrl in urls)
             {
-                Type type = engine.GetTypeForUrl(compile, batchUrl);
+                Type type = engine.GetTypeForUrl(compiledAssembly, batchUrl);
                 if (type == null)
                     throw new InvalidOperationException("Could not find the generated type for: " + batchUrl);
                 engine.SetInCache(batchUrl, type);
                 engine.NotifyOnChange(urls, delegate(Uri invalidatedUrl)
                 {
                     engine.RemoveFromCache(invalidatedUrl);
+                    standAloneCompilation.Add(invalidatedUrl);
                 });
             }
         }
