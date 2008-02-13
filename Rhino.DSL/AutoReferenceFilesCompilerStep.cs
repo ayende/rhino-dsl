@@ -168,7 +168,15 @@ namespace Rhino.DSL
 
 		private static string GetFilePath(Import node)
 		{
-			return node.AssemblyReference.Name
+            // assume this is located relative to the current file
+            if (node.LexicalInfo != null &&
+                File.Exists(node.LexicalInfo.FullPath))
+            {
+                string directory = Path.GetDirectoryName(node.LexicalInfo.FullPath);
+                return Path.Combine(directory, node.AssemblyReference.Name);
+            }
+
+		    return node.AssemblyReference.Name
 				.Replace("~", AppDomain.CurrentDomain.BaseDirectory);
 		}
 

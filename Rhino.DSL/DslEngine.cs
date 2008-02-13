@@ -66,7 +66,7 @@ namespace Rhino.DSL
         /// <returns></returns>
         protected virtual Exception CreateCompilerException(CompilerContext context)
         {
-            return context.Errors[0];
+            return new CompilerError(context.Errors.ToString(true));
         }
 
         
