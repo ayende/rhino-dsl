@@ -15,7 +15,7 @@ namespace Rhino.DSL
         /// Will retrieve all the _canonised_ urls from the given directory that
         /// this Dsl Engine can process.
         /// </summary>
-        string[] GetMatchingUrlsIn(string parentPath, string url);
+        string[] GetMatchingUrlsIn(string parentPath, ref string url);
 
         /// <summary>
         /// Will call the action delegate when any of the specified urls are changed.
@@ -38,11 +38,18 @@ namespace Rhino.DSL
         /// in the given parent path
         /// </summary>
         /// <param name="urls">The urls.</param>
-        /// <param name="parentOath">The parent oath.</param>
+        /// <param name="parentPath">The parent oath.</param>
         /// <param name="url">The URL.</param>
         /// <returns>
         /// 	<c>true</c> if [is URL include in] [the specified urls]; otherwise, <c>false</c>.
         /// </returns>
-        bool IsUrlIncludeIn(string[] urls, string parentOath, string url);
+        bool IsUrlIncludeIn(string[] urls, string parentPath, string url);
+
+        /// <summary>
+        /// Gets the type name from URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        string GetTypeNameFromUrl(string url);
     }
 }

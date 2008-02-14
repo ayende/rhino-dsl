@@ -75,7 +75,7 @@ namespace Rhino.DSL
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
                 throw new InvalidOperationException("Could not find an engine to process type: " + typeof(TDslBase));
             List<TDslBase> instances = new List<TDslBase>();
-            foreach (string dsl in GetUrlsFromDslEngine(engine, parentUrl))
+            foreach (string dsl in GetUrlsFromDslEngine(engine, ref parentUrl))
             {
                 instances.Add(Create<TDslBase>(dsl, parameters));
             }
@@ -110,7 +110,7 @@ namespace Rhino.DSL
             if (type == null)
             {
                 bool recompilation;
-                string[] urls = GetUrls(engine, url, out recompilation);
+                string[] urls = GetUrls(engine, ref url, out recompilation);
                 bool existsInArray = engine.Storage.IsUrlIncludeIn(urls, BaseDirectory, url);
                 if (existsInArray == false)
                 {
@@ -144,7 +144,7 @@ namespace Rhino.DSL
             }
         }
 
-        private string[] GetUrls(DslEngine engine, string url, out bool recompilation)
+        private string[] GetUrls(DslEngine engine, ref string url, out bool recompilation)
         {
             string[] urls;
             // we need to compile this separatedly, instead of
@@ -159,7 +159,7 @@ namespace Rhino.DSL
             }
             else
             {
-                urls = GetUrlsFromDslEngine(engine, url);
+                urls = GetUrlsFromDslEngine(engine, ref url);
             }
             return urls;
         }
@@ -180,9 +180,9 @@ namespace Rhino.DSL
             }
         }
 
-        private string[] GetUrlsFromDslEngine(DslEngine engine, string path)
+        private string[] GetUrlsFromDslEngine(DslEngine engine, ref string path)
         {
-            string[] matchingUrls = engine.Storage.GetMatchingUrlsIn(BaseDirectory, path);
+            string[] matchingUrls = engine.Storage.GetMatchingUrlsIn(BaseDirectory, ref path);
             List<string> urls = new List<string>();
             if (matchingUrls != null)
             {

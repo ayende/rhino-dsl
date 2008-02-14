@@ -38,12 +38,13 @@ namespace Rhino.DSL
         /// Will retrieve all the _canonised_ urls from the given directory that
         /// this Dsl Engine can process.
         /// </summary>
-        public virtual string[] GetMatchingUrlsIn(string parentPath, string url)
+        public virtual string[] GetMatchingUrlsIn(string parentPath, ref string url)
         {
             url = Path.GetFullPath(Path.Combine(parentPath, url));
-            if (Directory.Exists(url) == false)
-                url = Path.GetDirectoryName(url);
-            string[] files = Directory.GetFiles(url, FileNameFormat);
+            string directory = url;
+            if (Directory.Exists(directory) == false)
+                directory = Path.GetDirectoryName(directory);
+            string[] files = Directory.GetFiles(directory, FileNameFormat);
             Array.Sort(files);
             return files;
         }
@@ -117,6 +118,16 @@ namespace Rhino.DSL
             });
         }
 
+
+        /// <summary>
+        /// Gets the type name from URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns></returns>
+        public string GetTypeNameFromUrl(string url)
+        {
+            return Path.GetFileNameWithoutExtension(url);   
+        }
 
         ///<summary>
         ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

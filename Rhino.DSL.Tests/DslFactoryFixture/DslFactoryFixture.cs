@@ -10,7 +10,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     [TestFixture]
     public class DslFactoryFixture
     {
-        private readonly string testUrl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test");
+        private string testUrl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test");
 
         private readonly string testUrl2 =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("test2", "test"));
@@ -37,7 +37,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             mockedDslEngine.Storage = mockStorage;
             mockedDslEngine.Cache = mockCache;
 
-            SetupResult.For(mockStorage.GetMatchingUrlsIn("", testUrl)).Return(new string[] { testUrl });
+            SetupResult.For(mockStorage.GetMatchingUrlsIn("", ref testUrl)).Return(new string[] { testUrl });
             SetupResult.For(mockStorage.IsUrlIncludeIn(null, null, null))
                 .IgnoreArguments()
                 .Return(true);

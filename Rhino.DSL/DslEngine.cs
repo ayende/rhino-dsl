@@ -2,10 +2,8 @@ namespace Rhino.DSL
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Reflection;
     using Boo.Lang.Compiler;
-    using Boo.Lang.Compiler.IO;
     using Boo.Lang.Compiler.Pipelines;
 
     /// <summary>
@@ -119,7 +117,7 @@ namespace Rhino.DSL
         /// </summary>
         public virtual Type GetTypeForUrl(Assembly assembly, string url)
         {
-            string className = Path.GetFileNameWithoutExtension(url);
+            string className = Storage.GetTypeNameFromUrl(url);
             return assembly.GetType(className, false, true);
         }
     }
