@@ -43,13 +43,9 @@ namespace Rhino.DSL
             url = Path.GetFullPath(Path.Combine(parentPath, url));
             if (Directory.Exists(url) == false)
                 url = Path.GetDirectoryName(url);
-            List<string> urls = new List<string>();
-            foreach (string file in Directory.GetFiles(url, FileNameFormat))
-            {
-                urls.Add(file);
-            }
-            urls.Sort(CompareUrls);
-            return urls.ToArray();
+            string[] files = Directory.GetFiles(url, FileNameFormat);
+            Array.Sort(files);
+            return files;
         }
 
         /// <summary>
