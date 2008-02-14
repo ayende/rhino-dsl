@@ -103,14 +103,14 @@ namespace Rhino.DSL
         /// in the given parent path
         /// </summary>
         /// <param name="urls">The urls.</param>
-        /// <param name="parentOath">The parent oath.</param>
+        /// <param name="parentPath">The parent oath.</param>
         /// <param name="url">The URL.</param>
         /// <returns>
         /// 	<c>true</c> if [is URL include in] [the specified urls]; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool IsUrlIncludeIn(string[] urls, string parentOath, string url)
+        public virtual bool IsUrlIncludeIn(string[] urls, string parentPath, string url)
         {
-            string path = Path.GetFullPath(Path.Combine(parentOath, url));
+            string path = Path.GetFullPath(Path.Combine(parentPath, url));
             return Array.Exists(urls, delegate(string urlInArray)
             {
                 return urlInArray.Equals(path, StringComparison.InvariantCultureIgnoreCase);
