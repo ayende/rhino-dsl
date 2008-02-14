@@ -38,7 +38,6 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             mockedDslEngine.Cache = mockCache;
 
             SetupResult.For(mockStorage.GetMatchingUrlsIn("", testUrl)).Return(new string[] { testUrl });
-            SetupResult.For(mockStorage.FileNameFormat).Return("*.boo");
             SetupResult.For(mockStorage.IsUrlIncludeIn(null, null, null))
                 .IgnoreArguments()
                 .Return(true);

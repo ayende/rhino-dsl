@@ -12,11 +12,6 @@ namespace Rhino.DSL
     public interface IDslEngineStorage : IDisposable
     {
         /// <summary>
-        /// The file name format of this DSL
-        /// </summary>
-        string FileNameFormat { get; }
-
-        /// <summary>
         /// Will retrieve all the _canonised_ urls from the given directory that
         /// this Dsl Engine can process.
         /// </summary>
