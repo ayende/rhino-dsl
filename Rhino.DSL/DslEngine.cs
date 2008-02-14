@@ -12,17 +12,16 @@ namespace Rhino.DSL
     /// Base class for DSL engines, handles most of the routine tasks that a DSL
     /// engine needs to do. Compilation, caching, creation, etc.
     /// </summary>
-    public abstract class DslEngine  : IDisposable 
+    public abstract class DslEngine 
     {
-        private readonly IDictionary<Uri, Type> urlToTypeCache = new Dictionary<Uri, Type>();
-        private readonly Dictionary<string, FileSystemWatcher> pathToFileWatchers = new Dictionary<string, FileSystemWatcher>();
+        private readonly IDictionary<string, Type> urlToTypeCache = new Dictionary<string, Type>();
 
         /// <summary>
         /// Try to get a cached type for this URL.
         /// </summary>
         /// <param name="url">The url to use as a key for the cache</param>
         /// <returns>The compiled DSL or null if not found</returns>
-        public virtual Type GetFromCache(Uri url)
+        public virtual Type GetFromCache(string url)
         {
             Type result;
             urlToTypeCache.TryGetValue(url, out result);
@@ -45,7 +44,7 @@ namespace Rhino.DSL
         /// </summary>
         /// <param name="urls">The files to compile</param>
         /// <returns>The resulting compiler context</returns>
-        public virtual CompilerContext Compile(params Uri[] urls)
+        public virtual CompilerContext Compile(params string[] urls)
         {
             BooCompiler compiler = new BooCompiler();
             compiler.Parameters.OutputType = CompilerOutputType;
@@ -69,30 +68,20 @@ namespace Rhino.DSL
             return new CompilerError(context.Errors.ToString(true));
         }
 
-        
-        private void AddInputs(BooCompiler compiler, IEnumerable<Uri> urls)
+
+        private void AddInputs(BooCompiler compiler, IEnumerable<string> urls)
         {
-            foreach (Uri url in urls)
+            foreach (string url in urls)
             {
                 compiler.Parameters.Input.Add(CreateInput(url));
             }
         }
 
         /// <summary>
-        /// Create a compiler input from the URL.
-        /// </summary>
-        /// <param name="url">The url</param>
-        /// <returns>The compiler input</returns>
-        protected virtual ICompilerInput CreateInput(Uri url)
-        {
-            return new FileInput(url.AbsolutePath);
-        }
-
-        /// <summary>
         /// Customise the compiler to fit this DSL engine.
         /// This is the most commonly overriden method.
         /// </summary>
-        protected virtual void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, Uri[] urls)
+        protected virtual void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
         }
 
@@ -109,117 +98,26 @@ namespace Rhino.DSL
         /// Get a type from the assembly according to the URL.
         /// This is used to match a class with its originating file
         /// </summary>
-        public virtual Type GetTypeForUrl(Assembly assembly, Uri url)
+        public virtual Type GetTypeForUrl(Assembly assembly, string url)
         {
-            string className = Path.GetFileNameWithoutExtension(url.AbsolutePath);
+            string className = Path.GetFileNameWithoutExtension(url);
             return assembly.GetType(className, false, true);
         }
 
         /// <summary>
         /// Put the type in the cache, with the url as the key
         /// </summary>
-        public virtual void SetInCache(Uri url, Type type)
+        public virtual void SetInCache(string url, Type type)
         {
             urlToTypeCache[url] = type;
         }
 
-        /// <summary>
-        /// The file name format of this DSL
-        /// </summary>
-        public virtual string FileNameFormat
-        {
-            get
-            {
-                return "*.boo";
-            }
-        }
-
-        /// <summary>
-        /// Will retrieve all the _canonised_ urls from the given directory that
-        /// this Dsl Engine can process.
-        /// </summary>
-        public virtual Uri[] GetMatchingUrlsIn(string directory)
-        {
-            List<Uri> urls = new List<Uri>();
-            foreach (string url in Directory.GetFiles(directory, FileNameFormat))
-            {
-                urls.Add(new Uri(url));
-            }
-            urls.Sort(CompareUrls);
-            return urls.ToArray();
-        }
-
-        /// <summary>
-        /// Compares the two urls
-        /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
-        /// <returns></returns>
-        protected virtual int CompareUrls(Uri x, Uri y)
-        {
-            return x.AbsolutePath.CompareTo(y.AbsolutePath);
-        }
-
-        /// <summary>
-        /// Will call the action delegate when any of the specified urls are changed.
-        /// Note that for a single logical change several calls may be made.
-        /// </summary>
-        /// <param name="urls">The urls.</param>
-        /// <param name="action">The action.</param>
-        public void NotifyOnChange(IEnumerable<Uri> urls, Action<Uri> action)
-        {
-            lock (pathToFileWatchers)
-            {
-                string[] commonPaths = GatherCommonPaths(urls);
-                foreach (string path in commonPaths)
-                {
-                    FileSystemWatcher watcher;
-                    if(pathToFileWatchers.TryGetValue(path, out watcher)==false)
-                    {
-                        pathToFileWatchers[path] = watcher = new FileSystemWatcher(path, FileNameFormat);
-                        watcher.EnableRaisingEvents = true;
-                    }
-                    watcher.Changed += delegate(object sender, FileSystemEventArgs e)
-                    {
-                        action(new Uri(e.FullPath));
-                    };
-                }
-            }
-        }
-
-        private static string[] GatherCommonPaths(IEnumerable<Uri> urls)
-        {
-            List<string> paths = new List<string>();
-            foreach (Uri url in urls)
-            {
-                string path = Path.GetDirectoryName(url.AbsolutePath);
-                if(paths.Contains(path)==false)
-                    paths.Add(path);
-            }
-            return paths.ToArray();
-        }
-
-        ///<summary>
-        ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        ///</summary>
-        ///<filterpriority>2</filterpriority>
-        public void Dispose()
-        {
-            lock (pathToFileWatchers)
-           {
-               foreach (FileSystemWatcher watcher in pathToFileWatchers.Values)
-               {
-                   watcher.EnableRaisingEvents = false;
-                   watcher.Dispose();
-               }
-           }
-        }
 
         /// <summary>
         /// Removes the url for the from cache.
         /// </summary>
         /// <param name="url">The URL.</param>
-        public void RemoveFromCache(Uri url)
+        public virtual void RemoveFromCache(string url)
         {
             urlToTypeCache.Remove(url);
         }

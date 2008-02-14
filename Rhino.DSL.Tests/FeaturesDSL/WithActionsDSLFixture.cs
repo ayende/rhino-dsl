@@ -41,7 +41,7 @@ namespace Rhino.DSL.Tests.FeaturesDSL
 
     public class WithActionsDslEngine : DslEngine
     {
-        protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, System.Uri[] urls)
+        protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
             pipeline.Insert(1,
                             new AnonymousBaseClassCompilerStep(typeof(WithAction), "Execute",

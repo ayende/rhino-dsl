@@ -2,8 +2,8 @@ namespace Rhino.DSL
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Reflection;
+    using Boo.Lang.Compiler;
 
     /// <summary>
     /// Manage the creation of DSL instances, cache and creates them.
@@ -17,14 +17,14 @@ namespace Rhino.DSL
         /// usually this means scripts that has been changed after they were 
         /// compiled
         /// </summary>
-        private readonly List<Uri> standAloneCompilation = new List<Uri>();
+        private readonly List<string> standAloneCompilation = new List<string>();
 
         /// <summary>
         /// The base directory to read all the relative url from.
         /// </summary>
         public string BaseDirectory
         {
-            get { return baseDirectory; }
+            get { return baseDirectory ?? ""; }
             set { baseDirectory = value; }
         }
 
@@ -45,9 +45,8 @@ namespace Rhino.DSL
         /// <returns>The dsl instance</returns>
         public TDslBase Create<TDslBase>(string url, params object[] parameters)
         {
-            string directory = BaseDirectory ?? "";
-            url = Path.Combine(directory, url);
-            return Create<TDslBase>(new Uri(Path.GetFullPath(url)), parameters);
+            return CreateInternal<TDslBase>(ScriptNotFoundBehavior.Throw,
+                url, parameters);
         }
 
         /// <summary>
@@ -59,9 +58,8 @@ namespace Rhino.DSL
         /// <returns>The dsl instance</returns>
         public TDslBase TryCreate<TDslBase>(string url, params object[] parameters)
         {
-            string directory = BaseDirectory ?? "";
-            url = Path.Combine(directory, url);
-            return TryCreate<TDslBase>(new Uri(Path.GetFullPath(url)), parameters);
+            return CreateInternal<TDslBase>(ScriptNotFoundBehavior.ReturnNull,
+                url, parameters);
         }
 
         /// <summary>
@@ -73,42 +71,15 @@ namespace Rhino.DSL
         /// <returns></returns>
         public TDslBase[] CreateAll<TDslBase>(string parentUrl, params object[] parameters)
         {
-            string directory = BaseDirectory ?? "";
-            parentUrl = Path.Combine(directory, parentUrl);
             DslEngine engine;
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
                 throw new InvalidOperationException("Could not find an engine to process type: " + typeof(TDslBase));
             List<TDslBase> instances = new List<TDslBase>();
-            foreach (Uri dsl in GetUrls(engine, Path.GetFullPath(parentUrl)))
+            foreach (string dsl in GetUrls(engine, parentUrl))
             {
                 instances.Add(Create<TDslBase>(dsl, parameters));
             }
             return instances.ToArray();
-        }
-
-        /// <summary>
-        /// Create a new DSL instance
-        /// </summary>
-        /// <typeparam name="TDslBase">The base type of the DSL</typeparam>
-        /// <param name="url">The url to read the DSL file from</param>
-        /// <param name="parameters">optional ctor parameters</param>
-        /// <returns>The dsl instance</returns>
-        public TDslBase Create<TDslBase>(Uri url, params object[] parameters)
-        {
-            return CreateInternal<TDslBase>(ScriptNotFoundBehavior.Throw, url, parameters);
-        }
-
-        /// <summary>
-        /// Tries to create a new DSL instance, if it exists.
-        /// If it doesn't, return null.
-        /// </summary>
-        /// <typeparam name="TDslBase">The base type of the DSL</typeparam>
-        /// <param name="url">The url to read the DSL file from</param>
-        /// <param name="parameters">optional ctor parameters</param>
-        /// <returns>The dsl instance</returns>
-        public TDslBase TryCreate<TDslBase>(Uri url, params object[] parameters)
-        {
-            return CreateInternal<TDslBase>(ScriptNotFoundBehavior.ReturnNull, url, parameters);
         }
 
         /// <summary>
@@ -130,7 +101,7 @@ namespace Rhino.DSL
             ReturnNull
         }
 
-        private TDslBase CreateInternal<TDslBase>(ScriptNotFoundBehavior notFoundBehavior, Uri url, object[] parameters)
+        private TDslBase CreateInternal<TDslBase>(ScriptNotFoundBehavior notFoundBehavior, string url, object[] parameters)
         {
             DslEngine engine;
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
@@ -139,8 +110,9 @@ namespace Rhino.DSL
             if (type == null)
             {
                 bool recompilation;
-                Uri[] urls = GetUrls(engine, url, out recompilation);
-                if (Array.IndexOf(urls, url) == -1)
+                string[] urls = GetUrls(engine, url, out recompilation);
+                bool existsInArray = engine.IsUrlIncludeIn(urls, BaseDirectory, url);
+                if (existsInArray == false)
                 {
                     if (notFoundBehavior == ScriptNotFoundBehavior.Throw)
                     {
@@ -151,7 +123,8 @@ namespace Rhino.DSL
                         return default(TDslBase);
                     }
                 }
-                Assembly assembly = engine.Compile(urls).GeneratedAssembly;
+                CompilerContext compilerContext = engine.Compile(urls);
+                Assembly assembly = compilerContext.GeneratedAssembly;
                 RegisterBatchInCache(engine, urls, assembly);
                 //find the type that we searched for
                 //we may have a race condition with the cache, so we force
@@ -171,9 +144,9 @@ namespace Rhino.DSL
             }
         }
 
-        private Uri[] GetUrls(DslEngine engine, Uri url, out bool recompilation)
+        private string[] GetUrls(DslEngine engine, string url, out bool recompilation)
         {
-            Uri[] urls;
+            string[] urls;
             // we need to compile this separatedly, instead of
             // in a batch. This is usually happening when a script
             // has changed
@@ -181,25 +154,25 @@ namespace Rhino.DSL
             if (standAloneCompilation.Contains(url))
             {
                 standAloneCompilation.Remove(url);
-                urls = new Uri[] { url };
+                urls = new string[] { url };
                 recompilation = true;
             }
             else
             {
-                urls = GetUrls(engine, Path.GetDirectoryName(url.AbsolutePath));
+                urls = GetUrls(engine, url);
             }
             return urls;
         }
 
-        private void RegisterBatchInCache(DslEngine engine, IEnumerable<Uri> urls, Assembly compiledAssembly)
+        private void RegisterBatchInCache(DslEngine engine, IEnumerable<string> urls, Assembly compiledAssembly)
         {
-            foreach (Uri batchUrl in urls)
+            foreach (string batchUrl in urls)
             {
                 Type type = engine.GetTypeForUrl(compiledAssembly, batchUrl);
                 if (type == null)
                     throw new InvalidOperationException("Could not find the generated type for: " + batchUrl);
                 engine.SetInCache(batchUrl, type);
-                engine.NotifyOnChange(urls, delegate(Uri invalidatedUrl)
+                engine.NotifyOnChange(urls, delegate(string invalidatedUrl)
                 {
                     engine.RemoveFromCache(invalidatedUrl);
                     standAloneCompilation.Add(invalidatedUrl);
@@ -207,10 +180,10 @@ namespace Rhino.DSL
             }
         }
 
-        private static Uri[] GetUrls(DslEngine engine, string path)
+        private string[] GetUrls(DslEngine engine, string path)
         {
-            Uri[] matchingUrls = engine.GetMatchingUrlsIn(path);
-            List<Uri> urls = new List<Uri>();
+            string[] matchingUrls = engine.GetMatchingUrlsIn(BaseDirectory, path);
+            List<string> urls = new List<string>();
             if (matchingUrls != null)
             {
                 urls.AddRange(matchingUrls);

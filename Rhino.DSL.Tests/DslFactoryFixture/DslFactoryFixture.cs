@@ -10,10 +10,10 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     [TestFixture]
     public class DslFactoryFixture
     {
-        private readonly Uri testUrl = new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test"));
+        private readonly string testUrl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test");
 
-        private readonly Uri testUrl2 =
-            new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("test2", "test")));
+        private readonly string testUrl2 =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("test2", "test"));
 
         private CompilerContext context;
         private DslFactory factory;
@@ -31,9 +31,12 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             Assembly assembly = Assembly.GetCallingAssembly();
             context = new CompilerContext();
             context.GeneratedAssembly = assembly;
-            parentDirectory = Path.GetDirectoryName(testUrl.AbsolutePath);
-            SetupResult.For(mockedDslEngine.GetMatchingUrlsIn(parentDirectory)).Return(new Uri[] {testUrl});
+            parentDirectory = Path.GetDirectoryName(testUrl);
+            SetupResult.For(mockedDslEngine.GetMatchingUrlsIn("", testUrl)).Return(new string[] { testUrl });
             SetupResult.For(mockedDslEngine.FileNameFormat).Return("*.boo");
+            SetupResult.For(mockedDslEngine.IsUrlIncludeIn(null, null, null))
+                .IgnoreArguments()
+                .Return(true);
         }
 
         [Test]

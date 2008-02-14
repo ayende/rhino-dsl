@@ -46,7 +46,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 
     public class DemoDslEngine : DslEngine
     {
-        protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, Uri[] urls)
+        protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
             pipeline.Insert(1, new AnonymousBaseClassCompilerStep(typeof (DemoDslBase), "Execute"));
         }
