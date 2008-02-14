@@ -7,10 +7,9 @@ namespace Rhino.DSL
     using Boo.Lang.Compiler.IO;
 
     /// <summary>
-    /// This class handles the storage requirements for the DSL.
-    /// Where the files are located, when they are refreshed, etc
+    /// Handles the storage requirements for the DSL from a file system.
     /// </summary>
-    public class DslEngineStorage : IDisposable 
+    public class FileSystemDslEngineStorage : IDslEngineStorage
     {
         private readonly Dictionary<string, FileSystemWatcher> pathToFileWatchers = new Dictionary<string, FileSystemWatcher>();
 
@@ -19,7 +18,7 @@ namespace Rhino.DSL
         /// </summary>
         /// <param name="url">The url</param>
         /// <returns>The compiler input</returns>
-        protected virtual ICompilerInput CreateInput(string url)
+        public virtual ICompilerInput CreateInput(string url)
         {
             return new FileInput(url);
         }

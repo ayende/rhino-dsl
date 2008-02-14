@@ -27,14 +27,16 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             factory = new DslFactory();
             mocks = new MockRepository();
             mockedDslEngine = mocks.DynamicMock<DslEngine>();
-
+            IDslEngineStorage mockStorage = mocks.DynamicMock<IDslEngineStorage>();
             Assembly assembly = Assembly.GetCallingAssembly();
             context = new CompilerContext();
             context.GeneratedAssembly = assembly;
             parentDirectory = Path.GetDirectoryName(testUrl);
-            SetupResult.For(mockedDslEngine.GetMatchingUrlsIn("", testUrl)).Return(new string[] { testUrl });
-            SetupResult.For(mockedDslEngine.FileNameFormat).Return("*.boo");
-            SetupResult.For(mockedDslEngine.IsUrlIncludeIn(null, null, null))
+            mockedDslEngine.Storage = mockStorage;
+
+            SetupResult.For(mockStorage.GetMatchingUrlsIn("", testUrl)).Return(new string[] { testUrl });
+            SetupResult.For(mockStorage.FileNameFormat).Return("*.boo");
+            SetupResult.For(mockStorage.IsUrlIncludeIn(null, null, null))
                 .IgnoreArguments()
                 .Return(true);
         }

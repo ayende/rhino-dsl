@@ -15,6 +15,25 @@ namespace Rhino.DSL
     public abstract class DslEngine 
     {
         private readonly IDictionary<string, Type> urlToTypeCache = new Dictionary<string, Type>();
+        private IDslEngineStorage storage;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DslEngine"/> class.
+        /// </summary>
+        public DslEngine()
+        {
+            storage = new FileSystemDslEngineStorage();
+        }
+
+        /// <summary>
+        /// Gets or sets the storage for this DSL
+        /// </summary>
+        /// <value>The storage.</value>
+        public IDslEngineStorage Storage
+        {
+            get { return storage; }
+            set { storage = value; }
+        }
 
         /// <summary>
         /// Try to get a cached type for this URL.
@@ -73,7 +92,7 @@ namespace Rhino.DSL
         {
             foreach (string url in urls)
             {
-                compiler.Parameters.Input.Add(CreateInput(url));
+                compiler.Parameters.Input.Add(Storage.CreateInput(url));
             }
         }
 

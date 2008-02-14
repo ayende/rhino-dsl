@@ -111,7 +111,7 @@ namespace Rhino.DSL
             {
                 bool recompilation;
                 string[] urls = GetUrls(engine, url, out recompilation);
-                bool existsInArray = engine.IsUrlIncludeIn(urls, BaseDirectory, url);
+                bool existsInArray = engine.Storage.IsUrlIncludeIn(urls, BaseDirectory, url);
                 if (existsInArray == false)
                 {
                     if (notFoundBehavior == ScriptNotFoundBehavior.Throw)
@@ -172,7 +172,7 @@ namespace Rhino.DSL
                 if (type == null)
                     throw new InvalidOperationException("Could not find the generated type for: " + batchUrl);
                 engine.SetInCache(batchUrl, type);
-                engine.NotifyOnChange(urls, delegate(string invalidatedUrl)
+                engine.Storage.NotifyOnChange(urls, delegate(string invalidatedUrl)
                 {
                     engine.RemoveFromCache(invalidatedUrl);
                     standAloneCompilation.Add(invalidatedUrl);
@@ -182,7 +182,7 @@ namespace Rhino.DSL
 
         private string[] GetUrls(DslEngine engine, string path)
         {
-            string[] matchingUrls = engine.GetMatchingUrlsIn(BaseDirectory, path);
+            string[] matchingUrls = engine.Storage.GetMatchingUrlsIn(BaseDirectory, path);
             List<string> urls = new List<string>();
             if (matchingUrls != null)
             {

@@ -46,7 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousBaseClassCompilerStep.cs" />
-    <Compile Include="DslEngineStorage.cs" />
+    <Compile Include="FileSystemDslEngineStorage.cs" />
+    <Compile Include="IDslEngineStorage.cs" />
     <Compile Include="UseSymbolsStep.cs" />
     <Compile Include="AutoImportCompilerStep.cs" />
     <Compile Include="AutoReferenceFilesCompilerStep.cs" />
