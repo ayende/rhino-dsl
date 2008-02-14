@@ -75,7 +75,7 @@ namespace Rhino.DSL
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
                 throw new InvalidOperationException("Could not find an engine to process type: " + typeof(TDslBase));
             List<TDslBase> instances = new List<TDslBase>();
-            foreach (string dsl in GetUrls(engine, parentUrl))
+            foreach (string dsl in GetUrlsFromDslEngine(engine, parentUrl))
             {
                 instances.Add(Create<TDslBase>(dsl, parameters));
             }
@@ -159,7 +159,7 @@ namespace Rhino.DSL
             }
             else
             {
-                urls = GetUrls(engine, url);
+                urls = GetUrlsFromDslEngine(engine, url);
             }
             return urls;
         }
@@ -180,7 +180,7 @@ namespace Rhino.DSL
             }
         }
 
-        private string[] GetUrls(DslEngine engine, string path)
+        private string[] GetUrlsFromDslEngine(DslEngine engine, string path)
         {
             string[] matchingUrls = engine.Storage.GetMatchingUrlsIn(BaseDirectory, path);
             List<string> urls = new List<string>();
