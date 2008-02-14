@@ -20,6 +20,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
         private DslEngine mockedDslEngine;
         private MockRepository mocks;
         private string parentDirectory;
+        private IDslEngineCache mockCache;
 
         [SetUp]
         public void SetUp()
@@ -27,12 +28,14 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             factory = new DslFactory();
             mocks = new MockRepository();
             mockedDslEngine = mocks.DynamicMock<DslEngine>();
+            mockCache = mocks.DynamicMock<IDslEngineCache>();
             IDslEngineStorage mockStorage = mocks.DynamicMock<IDslEngineStorage>();
             Assembly assembly = Assembly.GetCallingAssembly();
             context = new CompilerContext();
             context.GeneratedAssembly = assembly;
             parentDirectory = Path.GetDirectoryName(testUrl);
             mockedDslEngine.Storage = mockStorage;
+            mockedDslEngine.Cache = mockCache;
 
             SetupResult.For(mockStorage.GetMatchingUrlsIn("", testUrl)).Return(new string[] { testUrl });
             SetupResult.For(mockStorage.FileNameFormat).Return("*.boo");
@@ -53,14 +56,14 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
         {
             using (mocks.Record())
             {
-                Expect.Call(mockedDslEngine.GetFromCache(testUrl)).Return(null);
+                Expect.Call(mockCache.Get(testUrl)).Return(null);
                 SetupResult.For(mockedDslEngine.GetTypeForUrl(null, null))
                     .IgnoreArguments()
                     .Return(typeof (DslEngine));
                 SetupResult.For(mockedDslEngine.Compile(testUrl)).Return(context);
                 SetupResult.For(mockedDslEngine.GetTypeForUrl(context.GeneratedAssembly, testUrl)).Return(
                     typeof (DslEngine));
-                Expect.Call(delegate { mockedDslEngine.SetInCache(testUrl, typeof (DslEngine)); })
+                Expect.Call(delegate { mockCache.Set(testUrl, typeof(DslEngine)); })
                     .Repeat.Any();
             }
 
@@ -91,7 +94,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
                     .Return(typeof (DslEngine));
                 SetupResult.For(mockedDslEngine.GetTypeForUrl(context.GeneratedAssembly, testUrl)).Return(
                     typeof (DslEngine));
-                Expect.Call(delegate { mockedDslEngine.SetInCache(testUrl, typeof (DslEngine)); })
+                Expect.Call(delegate { mockCache.Set(testUrl, typeof(DslEngine)); })
                     .Repeat.Any();
 
                 Expect.Call(mockedDslEngine.CreateInstance(typeof (DslEngine))).Return(null);
@@ -111,7 +114,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             {
                 Expect.Call(mockedDslEngine.Compile(testUrl)).Return(context);
                 Expect.Call(mockedDslEngine.GetTypeForUrl(context.GeneratedAssembly, testUrl)).Return(typeof (DslEngine));
-                Expect.Call(delegate { mockedDslEngine.SetInCache(testUrl, typeof (DslEngine)); });
+                Expect.Call(delegate { mockCache.Set(testUrl, typeof(DslEngine)); });
             }
 
             factory.Register<IDisposable>(mockedDslEngine);

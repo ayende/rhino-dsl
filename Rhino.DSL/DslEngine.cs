@@ -12,10 +12,10 @@ namespace Rhino.DSL
     /// Base class for DSL engines, handles most of the routine tasks that a DSL
     /// engine needs to do. Compilation, caching, creation, etc.
     /// </summary>
-    public abstract class DslEngine 
+    public abstract class DslEngine
     {
-        private readonly IDictionary<string, Type> urlToTypeCache = new Dictionary<string, Type>();
         private IDslEngineStorage storage;
+        private IDslEngineCache cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DslEngine"/> class.
@@ -23,6 +23,18 @@ namespace Rhino.DSL
         public DslEngine()
         {
             storage = new FileSystemDslEngineStorage();
+            cache = new DefaultDslEngineCache();
+        }
+
+
+        /// <summary>
+        /// Gets or sets the cache.
+        /// </summary>
+        /// <value>The cache.</value>
+        public IDslEngineCache Cache
+        {
+            get { return cache; }
+            set { cache = value; }
         }
 
         /// <summary>
@@ -33,18 +45,6 @@ namespace Rhino.DSL
         {
             get { return storage; }
             set { storage = value; }
-        }
-
-        /// <summary>
-        /// Try to get a cached type for this URL.
-        /// </summary>
-        /// <param name="url">The url to use as a key for the cache</param>
-        /// <returns>The compiled DSL or null if not found</returns>
-        public virtual Type GetFromCache(string url)
-        {
-            Type result;
-            urlToTypeCache.TryGetValue(url, out result);
-            return result;
         }
 
         /// <summary>
@@ -121,24 +121,6 @@ namespace Rhino.DSL
         {
             string className = Path.GetFileNameWithoutExtension(url);
             return assembly.GetType(className, false, true);
-        }
-
-        /// <summary>
-        /// Put the type in the cache, with the url as the key
-        /// </summary>
-        public virtual void SetInCache(string url, Type type)
-        {
-            urlToTypeCache[url] = type;
-        }
-
-
-        /// <summary>
-        /// Removes the url for the from cache.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        public virtual void RemoveFromCache(string url)
-        {
-            urlToTypeCache.Remove(url);
         }
     }
 }

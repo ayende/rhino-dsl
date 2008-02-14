@@ -106,7 +106,7 @@ namespace Rhino.DSL
             DslEngine engine;
             if (typeToDslEngine.TryGetValue(typeof(TDslBase), out engine) == false)
                 throw new InvalidOperationException("Could not find an engine to process type: " + typeof(TDslBase));
-            Type type = engine.GetFromCache(url);
+            Type type = engine.Cache.Get(url);
             if (type == null)
             {
                 bool recompilation;
@@ -171,10 +171,10 @@ namespace Rhino.DSL
                 Type type = engine.GetTypeForUrl(compiledAssembly, batchUrl);
                 if (type == null)
                     throw new InvalidOperationException("Could not find the generated type for: " + batchUrl);
-                engine.SetInCache(batchUrl, type);
+                engine.Cache.Set(batchUrl, type);
                 engine.Storage.NotifyOnChange(urls, delegate(string invalidatedUrl)
                 {
-                    engine.RemoveFromCache(invalidatedUrl);
+                    engine.Cache.Remove(invalidatedUrl);
                     standAloneCompilation.Add(invalidatedUrl);
                 });
             }
