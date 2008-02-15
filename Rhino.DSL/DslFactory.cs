@@ -186,7 +186,16 @@ namespace Rhino.DSL
             List<string> urls = new List<string>();
             if (matchingUrls != null)
             {
-                urls.AddRange(matchingUrls);
+                foreach (string url in matchingUrls)
+                {
+                    // not in cache, need to this to ensure
+                    // that we are not performing batch compilation
+                    // for scripts already on the cache (happens if
+                    // after the first batch compilation, we added a 
+                    // new script)
+                    if(engine.Cache.Get(url)== null)
+                        urls.Add(url);
+                }
             }
             return urls.ToArray();
         }
