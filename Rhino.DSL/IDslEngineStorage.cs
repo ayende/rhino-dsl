@@ -51,5 +51,10 @@ namespace Rhino.DSL
         /// <param name="url">The URL.</param>
         /// <returns></returns>
         string GetTypeNameFromUrl(string url);
+        
+        /// <summary>
+        /// Determains whatever the given url is a valid script url.
+        /// </summary>
+        bool IsValidScriptUrl(string url);
     }
 }

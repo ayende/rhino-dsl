@@ -112,9 +112,10 @@ namespace Rhino.DSL
         public virtual bool IsUrlIncludeIn(string[] urls, string parentPath, string url)
         {
             string path = Path.GetFullPath(Path.Combine(parentPath, url));
+            Uri pathUrl = new Uri(path);
             return Array.Exists(urls, delegate(string urlInArray)
             {
-                return urlInArray.Equals(path, StringComparison.InvariantCultureIgnoreCase);
+                return new Uri(urlInArray).Equals(pathUrl);
             });
         }
 
@@ -124,9 +125,17 @@ namespace Rhino.DSL
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns></returns>
-        public string GetTypeNameFromUrl(string url)
+        public virtual string GetTypeNameFromUrl(string url)
         {
             return Path.GetFileNameWithoutExtension(url);   
+        }
+        
+        /// <summary>
+        /// Determains whatever the given url is a valid script url.
+        /// </summary>
+        public virtual bool IsValidScriptUrl(string url)
+        {
+			return File.Exists(url);
         }
 
         ///<summary>

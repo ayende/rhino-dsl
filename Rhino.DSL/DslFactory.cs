@@ -197,6 +197,10 @@ namespace Rhino.DSL
                         urls.Add(url);
                 }
             }
+            // even if the path is in the cache, we still return the it
+            // so we will get a new version
+            if(urls.Contains(path)==false && engine.Storage.IsValidScriptUrl(path))
+				urls.Add(path);
             return urls.ToArray();
         }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<project 
+	name="Rhino.DSL.Tests" 
+	default="test" 
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
+>
+	<property overwrite="false" name="assembly.is-cls-compliant" value="false" />
+	<property name="root.dir" value="../.." />
+	<include buildfile="${root.dir}/common-project.xml" />
+
+	<target name="init" depends="common.init">
+		<assemblyfileset id="project.references" basedir="${build.dir}">
+			<include name="MbUnit.Framework.dll"/>
+			<include name="Rhino.DSL.dll" />
+			<include name="Rhino.Mocks.dll" />
+			<include name="Boo.Lang.dll" />
+			<include name="Boo.Lang.Compiler.dll" />
+			<include name="Boo.Lang.Parser.dll" />
+			
+		</assemblyfileset>
+
+		<resourcefileset id="project.resources" prefix="Resources" dynamicprefix="false" basedir="${src.dir}">
+			<include name="**/*.txt" />
+			<include name="**/*.resx" />
+			<exclude name="obj/**" />
+		</resourcefileset>
+		
+		<!-- copy the dsl files -->
+		<copy todir="${build.dir}">
+			<fileset basedir="${src.dir}">
+				<include name="OrderDSL/*.boo"/>
+				<include name="SchedulingDSL/*.boo"/>
+				<include name="FeaturesDSL/*.boo"/>
+				<include name="DslFactoryFixture/*.boo"/>
+				<include name="*.boo"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
+
+	<target name="test" depends="init generate-assemblyinfo common.compile-tests common.run-tests" description="Runs the tests" />
+
+</project>
