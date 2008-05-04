@@ -16,7 +16,7 @@ namespace Rhino.DSL
         private readonly Type baseClass;
         private readonly string methodName;
         private readonly string[] namespaces;
-
+        private readonly ParameterDeclarationCollection parameters;
 
         /// <summary>
         /// Create new instance of <seealso cref="AnonymousBaseClassCompilerStep"/>
@@ -25,10 +25,23 @@ namespace Rhino.DSL
         /// <param name="methodName">The name of the method that will get all the code from globals moved to it.</param>
         /// <param name="namespaces">Namespaces that would be automatically imported into all modules</param>
         public AnonymousBaseClassCompilerStep(Type baseClass, string methodName, params string[] namespaces)
+            : this(baseClass, methodName, null, namespaces)
+        {            
+        }
+
+        /// <summary>
+        /// Create new instance of <seealso cref="AnonymousBaseClassCompilerStep"/>
+        /// </summary>
+        /// <param name="baseClass">The base class that will be used</param>
+        /// <param name="methodName">The name of the method that will get all the code from globals moved to it.</param>
+        /// <param name="parameters">The parameters of this method</param>        
+        /// <param name="namespaces">Namespaces that would be automatically imported into all modules</param>               
+        public AnonymousBaseClassCompilerStep(Type baseClass, string methodName, ParameterDeclarationCollection parameters, params string[] namespaces)
         {
             this.namespaces = namespaces;
             this.baseClass = baseClass;
             this.methodName = methodName;
+            this.parameters = parameters;
         }
 
         ///<summary>
@@ -50,6 +63,16 @@ namespace Rhino.DSL
                 definition.Name = module.FullName;
                 definition.BaseTypes.Add(new SimpleTypeReference(baseClass.FullName));
                 Method method = new Method(methodName);
+                
+
+                if (parameters != null)
+                {
+                    foreach (ParameterDeclaration parameter in parameters)
+                    {
+                        method.Parameters.Add(parameter);
+                    }
+                }
+
                 method.Body = module.Globals;
                 module.Globals = new Block();
                 definition.Members.Add(method);
