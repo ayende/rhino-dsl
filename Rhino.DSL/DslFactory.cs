@@ -123,7 +123,17 @@ namespace Rhino.DSL
                         return default(TDslBase);
                     }
                 }
-                CompilerContext compilerContext = engine.Compile(urls);
+                CompilerContext compilerContext;
+                try
+                {
+                    compilerContext = engine.Compile(urls);
+                }
+                catch (Exception)
+                {
+                    // if we fail to compile with batch, we will try just the current url
+                    urls = new string[]{url};
+                    compilerContext = engine.Compile(urls);
+                }
                 Assembly assembly = compilerContext.GeneratedAssembly;
                 RegisterBatchInCache(engine, urls, assembly);
                 //find the type that we searched for
