@@ -209,12 +209,20 @@ namespace Rhino.DSL
             }
             // even if the path is in the cache, we still return the it
             // so we will get a new version
-            if(urls.Contains(path)==false && engine.Storage.IsValidScriptUrl(path))
+        	if (urls.Exists(GetMatchPathPredicate(path)) == false && engine.Storage.IsValidScriptUrl(path))
 				urls.Add(path);
             return urls.ToArray();
         }
 
-        /// <summary>
+    	private Predicate<string> GetMatchPathPredicate(string path)
+    	{
+    		return delegate(string url)
+    		{
+    			 return path.Equals(url, StringComparison.InvariantCultureIgnoreCase);
+    		};
+    	}
+
+    	/// <summary>
         /// Check if there was a DSL registered for this base type.
         /// </summary>
         public bool IsRegistered<TDslBase>()

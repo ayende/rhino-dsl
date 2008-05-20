@@ -90,7 +90,10 @@ namespace Rhino.DSL
         {
             foreach (string url in urls)
             {
-                compiler.Parameters.Input.Add(Storage.CreateInput(url));
+            	ICompilerInput input = Storage.CreateInput(url);
+				if(input==null)
+					throw new InvalidOperationException("Got a null input for url: " + url);
+            	compiler.Parameters.Input.Add(input);
             }
         }
 

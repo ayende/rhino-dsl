@@ -6,6 +6,13 @@ namespace Rhino.DSL.Tests.FeaturesDSL
     [TestFixture]
     public class WithActionsDSLFixture : BaseDslFixture<WithActionsDslEngine,WithAction>
     {
+		[Test]
+		public void UsingWrongCase()
+		{
+			WithAction[] actions = factory.CreateAll<WithAction>(@"FeaturesDSL/hasAction.boo");
+			Assert.AreEqual(1, actions.Length);
+		}
+
         [Test]
         public void CanTryToCreateNonExistingScript()
         {
