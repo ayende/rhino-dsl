@@ -18,17 +18,17 @@ namespace Rhino.DSL.Tests.OrderDSL
 		public bool shouldSuggestUpgradeToPreferred;
 		public bool shouldApplyFreeShipping;
 
-		protected void addDiscountPrecentage(decimal precentage)
+		protected void AddDiscountPrecentage(decimal precentage)
 		{
 			this.discountPrecentage = precentage;
 		}
 
-		protected void suggestUpgradeToPreferred()
+		protected void SuggestUpgradeToPreferred()
 		{
 			shouldSuggestUpgradeToPreferred = true;
 		}
 
-		protected void applyFreeShipping()
+		protected void ApplyFreeShipping()
 		{
 			shouldApplyFreeShipping = true;
 		}

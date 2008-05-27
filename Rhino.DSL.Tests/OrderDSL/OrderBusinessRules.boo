@@ -1,8 +1,8 @@
 when User.IsPreferred and Order.TotalCost > 1000:
-	addDiscountPrecentage  5
-	applyFreeShipping
+	AddDiscountPrecentage  5
+	ApplyFreeShipping
 when not User.IsPreferred and Order.TotalCost > 1000:
-	suggestUpgradeToPreferred 
-	applyFreeShipping
+	SuggestUpgradeToPreferred 
+	ApplyFreeShipping
 when User.IsNotPreferred and Order.TotalCost > 500:
-	applyFreeShipping
+	ApplyFreeShipping

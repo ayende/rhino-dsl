@@ -26,10 +26,15 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             Assert.AreEqual("test", demo.Messages[0]);
 
             File.WriteAllText(path,"log 'changed'");
-            Thread.Sleep(200);//let it time to refresh
-            demo = factory.Create<DemoDslBase>(path);
-            demo.Execute();
-            Assert.AreEqual("changed", demo.Messages[0]);
+        	for (int i = 0; i < 5; i++)
+        	{
+				Thread.Sleep(200);//let it time to refresh
+				demo = factory.Create<DemoDslBase>(path);
+				demo.Execute();
+				if(demo.Messages[0]=="changed")
+					break;
+        	}
+			Assert.AreEqual("changed", demo.Messages[0]);
         }
     }
 
