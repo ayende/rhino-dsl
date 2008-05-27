@@ -2,6 +2,11 @@ namespace Rhino.DSL
 {
     using System;
 
+	/// <summary>
+	/// An action delegate to be executed under a cache lock
+	/// </summary>
+	public delegate void CacheAction();
+
     /// <summary>
     /// Cahce interface for the DslEngine
     /// </summary>
@@ -24,5 +29,17 @@ namespace Rhino.DSL
         /// </summary>
         /// <param name="url">The URL.</param>
         void Remove(string url);
+
+		/// <summary>
+		/// Execute the action under a write lock
+		/// </summary>
+		/// <param name="cacheAction">The cache action.</param>
+    	void WriteLock(CacheAction cacheAction);
+
+		/// <summary>
+		/// Execute the action under a read lock
+		/// </summary>
+		/// <param name="cacheAction">The cache action.</param>
+    	void ReadLock(CacheAction cacheAction);
     }
 }

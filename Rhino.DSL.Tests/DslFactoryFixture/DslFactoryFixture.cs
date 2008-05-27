@@ -29,7 +29,18 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             mocks = new MockRepository();
             mockedDslEngine = mocks.DynamicMock<DslEngine>();
             mockCache = mocks.DynamicMock<IDslEngineCache>();
-            IDslEngineStorage mockStorage = mocks.DynamicMock<IDslEngineStorage>();
+        	
+			mockCache.WriteLock(null);
+        	LastCall.Repeat.Any()
+        		.IgnoreArguments()
+        		.Do((Action<CacheAction>) ExecuteCachedAction);
+			
+			mockCache.ReadLock(null);
+			LastCall.Repeat.Any()
+				.IgnoreArguments()
+				.Do((Action<CacheAction>)ExecuteCachedAction);
+            
+			IDslEngineStorage mockStorage = mocks.DynamicMock<IDslEngineStorage>();
             Assembly assembly = Assembly.GetCallingAssembly();
             context = new CompilerContext();
             context.GeneratedAssembly = assembly;
@@ -43,7 +54,12 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
                 .Return(true);
         }
 
-        [Test]
+    	private void ExecuteCachedAction(CacheAction action)
+    	{
+    		action();
+    	}
+
+    	[Test]
         public void Can_register_a_dsl_engine_for_base_type()
         {
             factory.Register<IDisposable>(mockedDslEngine);
