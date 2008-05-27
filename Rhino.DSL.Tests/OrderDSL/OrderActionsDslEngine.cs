@@ -1,3 +1,6 @@
+using System.Threading;
+using Boo.Lang.Compiler.Steps;
+
 namespace Rhino.DSL.Tests.OrderDSL
 {
     using Boo.Lang.Compiler;
@@ -10,6 +13,8 @@ namespace Rhino.DSL.Tests.OrderDSL
                             new AnonymousBaseClassCompilerStep(typeof (BaseOrderActionsDSL), "Prepare",
                                                                //default namespaces
                                                                "Rhino.DSL.Tests.SchedulingDSL"));
+        	pipeline.Replace(typeof (ProcessMethodBodiesWithDuckTyping),
+							 new ProcessMethodBodiesWithDslNamesAndDuckTyping());
         }
     }
 }

@@ -13,7 +13,15 @@ namespace Rhino.DSL.Tests.OrderDSL
             Assert.IsNotNull(factory.Create<BaseOrderActionsDSL>(@"OrderDSL\OrderBusinessRules.boo"));
         }
 
-        [Test]
+		[Test]
+		public void CanCompile_WithDifferentOperations()
+		{
+			BaseOrderActionsDSL dsl = factory.Create<BaseOrderActionsDSL>(@"OrderDSL\OrderBusinessRules_DifferentOperations.boo");
+			Assert.IsNotNull(dsl);
+		}
+
+
+    	[Test]
         public void
             When_User_is_preferred_and_Order_total_cost_is_above_1000_should_apply_free_shipping_and_5_precent_discount()
         {

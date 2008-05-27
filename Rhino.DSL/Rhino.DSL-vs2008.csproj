@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\Boo\Boo.Lang.dll</HintPath>
+    </Reference>
     <Reference Include="Boo.Lang.Compiler, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\Boo\Boo.Lang.Compiler.dll</HintPath>
@@ -55,6 +59,7 @@
     <Compile Include="FileSystemDslEngineStorage.cs" />
     <Compile Include="IDslEngineCache.cs" />
     <Compile Include="IDslEngineStorage.cs" />
+    <Compile Include="ProcessMethodBodiesWithDslNamesAndDuckTyping.cs" />
     <Compile Include="UseSymbolsStep.cs" />
     <Compile Include="AutoImportCompilerStep.cs" />
     <Compile Include="AutoReferenceFilesCompilerStep.cs" />
