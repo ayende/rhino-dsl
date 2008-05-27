@@ -14,11 +14,11 @@ namespace Rhino.DSL
 	/// You can  enable this behavior using the following statement
 	/// <code>
 	/// compiler.Parameters.Pipeline
-	///		.Replace(typeof (ProcessMethodBodiesWithDuckTyping),
-	/// 				 new ProcessMethodBodiesWithDslNamesAndDuckTyping());
+	///		.InsertBefore(typeof (ProcessMethodBodiesWithDuckTyping),
+	/// 				 new UnderscorNamingConventionsToPascalCaseCompilerStep());
 	/// </code>
 	/// </example>
-	public class ProcessMethodBodiesWithDslNamesAndDuckTyping : ProcessMethodBodiesWithDuckTyping
+	public class UnderscorNamingConventionsToPascalCaseCompilerStep : AbstractVisitorCompilerStep
 	{
 		/// <summary>
 		/// Called when we encounter a reference expression
@@ -26,9 +26,19 @@ namespace Rhino.DSL
 		/// <param name="node">The node.</param>
 		public override void OnReferenceExpression(ReferenceExpression node)
 		{
-			if(node.Name.Contains("_"))
-				SetNodeNameToPascalCase(node);
+			if(ShouldTransformNodeName(node))
+				TransformNodeName(node);
 			base.OnReferenceExpression(node);
+		}
+
+		/// <summary>
+		/// Determain if the the name of the node should be transformed.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
+		protected virtual bool ShouldTransformNodeName(ReferenceExpression node)
+		{
+			return node.Name.Contains("_");
 		}
 
 		/// <summary>
@@ -37,8 +47,8 @@ namespace Rhino.DSL
 		/// <param name="node">The node.</param>
 		public override void OnMemberReferenceExpression(MemberReferenceExpression node)
 		{
-			if (node.Name.Contains("_"))
-				SetNodeNameToPascalCase(node);
+			if (ShouldTransformNodeName(node))
+				TransformNodeName(node);
 			base.OnMemberReferenceExpression(node);
 		}
 
@@ -46,7 +56,7 @@ namespace Rhino.DSL
 		/// Sets the node name to pascal case.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private static void SetNodeNameToPascalCase(ReferenceExpression node)
+		protected virtual void TransformNodeName(ReferenceExpression node)
 		{
 			string[] parts = node.Name.Split(new char[] { '_' },StringSplitOptions.RemoveEmptyEntries);
 			StringBuilder name = new StringBuilder();
@@ -56,6 +66,14 @@ namespace Rhino.DSL
 					.Append(part.Substring(1));
 			}
 			node.Name = name.ToString();
+		}
+
+		/// <summary>
+		/// Start visiting the current compile unit
+		/// </summary>
+		public override void Run()
+		{
+			Visit(CompileUnit);
 		}
 	}
 }

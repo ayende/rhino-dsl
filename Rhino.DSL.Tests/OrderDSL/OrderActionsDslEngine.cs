@@ -13,8 +13,8 @@ namespace Rhino.DSL.Tests.OrderDSL
                             new AnonymousBaseClassCompilerStep(typeof (BaseOrderActionsDSL), "Prepare",
                                                                //default namespaces
                                                                "Rhino.DSL.Tests.SchedulingDSL"));
-        	pipeline.Replace(typeof (ProcessMethodBodiesWithDuckTyping),
-							 new ProcessMethodBodiesWithDslNamesAndDuckTyping());
+        	pipeline.InsertBefore(typeof (ProcessMethodBodiesWithDuckTyping),
+							 new UnderscorNamingConventionsToPascalCaseCompilerStep());
         }
     }
 }
