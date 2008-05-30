@@ -60,7 +60,7 @@ namespace Rhino.DSL
 		{
 			string[] parts = node.Name.Split(new char[] { '_' },StringSplitOptions.RemoveEmptyEntries);
 			StringBuilder name = new StringBuilder();
-			foreach (var part in parts)
+			foreach (string part in parts)
 			{
 				name.Append(char.ToUpperInvariant(part[0]))
 					.Append(part.Substring(1));
