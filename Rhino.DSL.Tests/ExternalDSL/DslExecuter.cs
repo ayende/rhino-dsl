@@ -33,7 +33,7 @@ namespace Rhino.DSL.Tests.ExternalDSL
 			}
 			else
 			{
-				converted = Convert.ChangeType(expression.Right, paramType);
+				converted = Convert.ChangeType(expression.Right, paramType, System.Globalization.CultureInfo.InvariantCulture);
 			}
 			return method.Invoke(obj, new object[] {converted});
 		}
