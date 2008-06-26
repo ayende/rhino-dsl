@@ -45,7 +45,7 @@ namespace Rhino.DSL.Tests
 		protected override void AddCompilerSteps(BooCompiler compiler, string filename, CompilerPipeline pipeline)
 		{
 			compiler.Parameters.Pipeline.Insert(1, 
-				new AnonymousBaseClassCompilerStep(typeof (MyAnonymousBaseClass), "Run"));
+				new ImplicitBaseClassCompilerStep(typeof (MyAnonymousBaseClass), "Run"));
 		}
 	}
 

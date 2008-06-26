@@ -71,6 +71,7 @@
     <Compile Include="ExternalDSL\ExternalDSLDemo.cs" />
     <Compile Include="ExternalDSL\Parser.cs" />
     <Compile Include="FeaturesDSL\WithActionsDSLFixture.cs" />
+    <Compile Include="MethodSubstitutionBaseClassTestFixture.cs" />
     <Compile Include="OrderDSL\BaseOrderActionsDSL.cs" />
     <Compile Include="OrderDSL\Order.cs" />
     <Compile Include="OrderDSL\OrderActionsDslEngine.cs" />
@@ -106,6 +107,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="FeaturesDSL\HasAction.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MethodSubstitutionBaseClass.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="namespacesImports.boo">

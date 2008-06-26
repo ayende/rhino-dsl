@@ -67,7 +67,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
                 new ParameterDeclaration("input", new SimpleTypeReference("System.String"));
             parameters.Add(newParameterDeclaration);
 
-            pipeline.Insert(1, new AnonymousBaseClassCompilerStep(typeof(MyClassWithParams),
+            pipeline.Insert(1, new ImplicitBaseClassCompilerStep(typeof(MyClassWithParams),
                 "Hello",
                 parameters,
                 "System"));

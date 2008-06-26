@@ -50,11 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnonymousBaseClassCompilerStep.cs" />
+    <Compile Include="BaseClassCompilerStep.cs" />
     <Compile Include="DefaultDslEngineCache.cs" />
     <Compile Include="FileSystemDslEngineStorage.cs" />
     <Compile Include="IDslEngineCache.cs" />
     <Compile Include="IDslEngineStorage.cs" />
+    <Compile Include="ImplicitBaseClassCompilerStep.cs" />
+    <Compile Include="MacroBlockToParametersTransformer.cs" />
+    <Compile Include="MethodSubstitutionBaseClassCompilerStep.cs" />
+    <Compile Include="UnderscorNamingConventionsToPascalCaseCompilerStep.cs" />
     <Compile Include="UseSymbolsStep.cs" />
     <Compile Include="AutoImportCompilerStep.cs" />
     <Compile Include="AutoReferenceFilesCompilerStep.cs" />

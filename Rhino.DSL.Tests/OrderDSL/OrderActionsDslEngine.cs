@@ -10,7 +10,7 @@ namespace Rhino.DSL.Tests.OrderDSL
         protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
             pipeline.Insert(1,
-                            new AnonymousBaseClassCompilerStep(typeof (BaseOrderActionsDSL), "Prepare",
+                            new ImplicitBaseClassCompilerStep(typeof (BaseOrderActionsDSL), "Prepare",
                                                                //default namespaces
                                                                "Rhino.DSL.Tests.SchedulingDSL"));
 			pipeline.InsertBefore(typeof (ProcessMethodBodiesWithDuckTyping),

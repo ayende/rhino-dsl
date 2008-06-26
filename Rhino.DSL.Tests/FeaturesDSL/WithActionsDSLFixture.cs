@@ -51,7 +51,7 @@ namespace Rhino.DSL.Tests.FeaturesDSL
         protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
             pipeline.Insert(1,
-                            new AnonymousBaseClassCompilerStep(typeof(WithAction), "Execute",
+                            new ImplicitBaseClassCompilerStep(typeof(WithAction), "Execute",
                                                                //default namespaces
                                                                "Rhino.DSL.Tests.FeaturesDSL"));
             pipeline.Insert(2, new UseSymbolsStep());

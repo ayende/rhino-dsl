@@ -53,7 +53,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     {
         protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
-            pipeline.Insert(1, new AnonymousBaseClassCompilerStep(typeof (DemoDslBase), "Execute"));
+            pipeline.Insert(1, new ImplicitBaseClassCompilerStep(typeof (DemoDslBase), "Execute"));
         }
     }
 }
