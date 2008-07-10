@@ -57,26 +57,26 @@ namespace Rhino.DSL
 
 		private static Expression[] GetExpressionsFromBlock(Block block)
 		{
-			var expressions = new List<Expression>(block.Statements.Count);
+			List<Expression> expressions = new List<Expression>(block.Statements.Count);
 			foreach (Statement statement in block.Statements)
 			{
 				if (statement is ExpressionStatement)
 					expressions.Add((statement as ExpressionStatement).Expression);
 				else if (statement is MacroStatement)
 				{
-					var macroStatement = statement as MacroStatement;
+					MacroStatement macroStatement = statement as MacroStatement;
 					if (macroStatement.Arguments.Count == 0 &&
 						!macroStatement.Block.HasStatements)
 					{
 						// Assume it is a reference expression
-						var refExp = new ReferenceExpression(macroStatement.LexicalInfo);
+						ReferenceExpression refExp = new ReferenceExpression(macroStatement.LexicalInfo);
 						refExp.Name = macroStatement.Name;
 						expressions.Add(refExp);
 					}
 					else
 					{
 						// Assume it is a MethodInvocation
-						var mie = new MethodInvocationExpression(macroStatement.LexicalInfo);
+						MethodInvocationExpression mie = new MethodInvocationExpression(macroStatement.LexicalInfo);
 						mie.Target = new ReferenceExpression(macroStatement.LexicalInfo, macroStatement.Name);
 						mie.Arguments = macroStatement.Arguments;
 
@@ -85,7 +85,7 @@ namespace Rhino.DSL
 							// If the macro statement has a block,                      
 							// transform it into a block expression and pass that as the last argument                     
 							// to the method invocation.
-							var be = new BlockExpression(macroStatement.LexicalInfo);
+							BlockExpression be = new BlockExpression(macroStatement.LexicalInfo);
 							be.Body = macroStatement.Block.CloneNode();
 
 							mie.Arguments.Add(be);

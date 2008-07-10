@@ -10,14 +10,14 @@ namespace Rhino.DSL.Tests
 		public void Expression_statement_is_transformed()
 		{
 			LiteralExpression exp = new StringLiteralExpression("arg1");
-			var doStuffStatement = new ExpressionStatement(exp);
+			ExpressionStatement doStuffStatement = new ExpressionStatement(exp);
 
-			var fixture = new MacroStatement(new LexicalInfo("test", 1, 1));
+			MacroStatement fixture = new MacroStatement(new LexicalInfo("test", 1, 1));
 			fixture.Name = "DoStuff";
 			fixture.Block = new Block();
 			fixture.Block.Add(doStuffStatement);
 
-			var transformer = new BlockToArgumentsTransformer("DoStuff");
+			BlockToArgumentsTransformer transformer = new BlockToArgumentsTransformer("DoStuff");
 			transformer.Visit(fixture);
 
 			Assert.AreEqual(exp, fixture.Arguments[0]);
@@ -29,12 +29,12 @@ namespace Rhino.DSL.Tests
 		{
 			const string referenceName = "some_reference";
 
-			var statementInBlock = new MacroStatement();
+			MacroStatement statementInBlock = new MacroStatement();
 			statementInBlock.Name = referenceName;
 
 			MacroStatement fixture = GetMacroStatement("DoStuff", statementInBlock);
 
-			var transformer = new BlockToArgumentsTransformer("DoStuff");
+			BlockToArgumentsTransformer transformer = new BlockToArgumentsTransformer("DoStuff");
 			transformer.Visit(fixture);
 
 			Assert.IsAssignableFrom(typeof (ReferenceExpression), fixture.Arguments[0]);
@@ -54,10 +54,10 @@ namespace Rhino.DSL.Tests
 
 			MacroStatement doStuffStatement = GetMacroStatement(doStuff, statementInBlock);
 
-			var transformer = new BlockToArgumentsTransformer(doStuff, methodInBlockName);
+			BlockToArgumentsTransformer transformer = new BlockToArgumentsTransformer(doStuff, methodInBlockName);
 			transformer.Visit(doStuffStatement);
 
-			var mie = doStuffStatement.Arguments[0] as MethodInvocationExpression;
+			MethodInvocationExpression mie = doStuffStatement.Arguments[0] as MethodInvocationExpression;
 
 			Assert.IsNotNull(mie, "Could not cast argument one of MacroStatement to MethodInvocationExpression.");
 			Assert.AreEqual(methodInBlockName, (mie.Target as ReferenceExpression).Name);
@@ -69,16 +69,16 @@ namespace Rhino.DSL.Tests
 		{
 			const string methodInBlockName = "some_method";
 
-			var statementInBlock = new MacroStatement();
+			MacroStatement statementInBlock = new MacroStatement();
 			statementInBlock.Name = methodInBlockName;
 			statementInBlock.Arguments.Add(new StringLiteralExpression("arg1"));
 
 			MacroStatement fixture = GetMacroStatement("DoStuff", statementInBlock);
 
-			var transformer = new BlockToArgumentsTransformer("DoStuff");
+			BlockToArgumentsTransformer transformer = new BlockToArgumentsTransformer("DoStuff");
 			transformer.Visit(fixture);
 
-			var mie = fixture.Arguments[0] as MethodInvocationExpression;
+			MethodInvocationExpression mie = fixture.Arguments[0] as MethodInvocationExpression;
 
 			Assert.IsNotNull(mie, "Could not cast argument one of MacroStatement to MethodInvocationExpression.");
 			Assert.AreEqual(methodInBlockName, (mie.Target as ReferenceExpression).Name);
@@ -86,7 +86,7 @@ namespace Rhino.DSL.Tests
 
 		private MacroStatement GetMacroStatement(string name, params Statement[] blockStatements)
 		{
-			var fixture = new MacroStatement();
+			MacroStatement fixture = new MacroStatement();
 			fixture.Name = name;
 			fixture.Block = new Block();
 			foreach (Statement statement in blockStatements)
