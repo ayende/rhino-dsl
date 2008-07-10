@@ -56,7 +56,6 @@
     <Compile Include="IDslEngineCache.cs" />
     <Compile Include="IDslEngineStorage.cs" />
     <Compile Include="ImplicitBaseClassCompilerStep.cs" />
-    <Compile Include="MacroBlockToParametersTransformer.cs" />
     <Compile Include="MethodSubstitutionBaseClassCompilerStep.cs" />
     <Compile Include="UnderscorNamingConventionsToPascalCaseCompilerStep.cs" />
     <Compile Include="UseSymbolsStep.cs" />
