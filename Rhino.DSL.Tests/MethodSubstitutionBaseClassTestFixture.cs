@@ -44,6 +44,15 @@ namespace Rhino.DSL.Tests
 				consoleOutput.GetStringBuilder().ToString());
 		}
 
+		[Test]
+		public void GlobalAssignmentExpressionStatementIsFieldOnType()
+		{
+			MyMethodSubstitutionBaseClass instance = (MyMethodSubstitutionBaseClass)assembly.CreateInstance("MethodSubstitutionBaseClass");
+
+			FieldInfo fi = instance.GetType().GetField("variableThatShouldBecomeAField", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.IsNotNull(fi);
+		}
+
 		protected override void AddCompilerSteps(BooCompiler compiler, string filename, CompilerPipeline pipeline)
 		{
 			compiler.Parameters.AddAssembly(typeof(Boo.Lang.Compiler.Ast.DepthFirstTransformer).Assembly);

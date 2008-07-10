@@ -68,6 +68,27 @@ namespace Rhino.DSL
 			MethodSubstitutionTransformer mst = new MethodSubstitutionTransformer(methodsThatAreOverridable.ToArray(), definition);
 			mst.Visit(module);
 
+			foreach (Statement statement in module.Globals.Statements)
+			{
+				ExpressionStatement es = statement as ExpressionStatement;
+				if (es != null)
+				{
+					BinaryExpression be = es.Expression as BinaryExpression;
+					if (be != null)
+					{
+						if (be.Left.NodeType == NodeType.ReferenceExpression && be.Operator == BinaryOperatorType.Assign)
+						{
+							ReferenceExpression refExp = be.Left as ReferenceExpression;
+
+							Field field = new Field(refExp.LexicalInfo);
+							field.Name = refExp.Name;
+							field.Initializer = be.Right;
+							definition.Members.Add(field);
+						}
+					}
+				}
+			}
+
 			if (transformers != null)
 			{
 				foreach (DepthFirstTransformer transformer in transformers)
@@ -94,9 +115,11 @@ namespace Rhino.DSL
 				{
 					Method method = new Method(node.LexicalInfo);
 					method.Name = node.Name;
-					method.Body = node.Block;
+					method.Body = node.Block.CloneNode();
 
 					classDefinition.Members.Add(method);
+
+					RemoveCurrentNode();
 				}
 				else
 				{

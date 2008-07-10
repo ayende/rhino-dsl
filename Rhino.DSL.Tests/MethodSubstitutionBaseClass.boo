@@ -1,3 +1,5 @@
+variableThatShouldBecomeAField = "testValue"
+
 SomeAbstractMethod:
 	System.Console.WriteLine("abstract")
 	

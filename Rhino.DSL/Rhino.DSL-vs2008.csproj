@@ -54,13 +54,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockToArgumentsTransformer.cs" />
     <Compile Include="ImplicitBaseClassCompilerStep.cs" />
     <Compile Include="BaseClassCompilerStep.cs" />
     <Compile Include="DefaultDslEngineCache.cs" />
     <Compile Include="FileSystemDslEngineStorage.cs" />
     <Compile Include="IDslEngineCache.cs" />
     <Compile Include="IDslEngineStorage.cs" />
-    <Compile Include="MacroBlockToParametersTransformer.cs" />
     <Compile Include="MethodSubstitutionBaseClassCompilerStep.cs" />
     <Compile Include="UnderscorNamingConventionsToPascalCaseCompilerStep.cs" />
     <Compile Include="UseSymbolsStep.cs" />
@@ -84,4 +84,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Notes="&lt;Notes Project=&quot;b788f27c-e00a-434a-81aa-1d592e030934&quot; xmlns=&quot;clr-namespace:StickyNotes.Model;assembly=StickyNotes&quot;&gt;&lt;Notes.StickyNotes&gt;&lt;Note FilePath=&quot;&quot; Content=&quot;&quot; Date=&quot;2008-07-02T15:01:02.2087309-04:00&quot; /&gt;&lt;/Notes.StickyNotes&gt;&lt;/Notes&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
