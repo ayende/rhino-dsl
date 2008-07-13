@@ -62,6 +62,7 @@
     <Compile Include="IDslEngineCache.cs" />
     <Compile Include="IDslEngineStorage.cs" />
     <Compile Include="MethodSubstitutionBaseClassCompilerStep.cs" />
+    <Compile Include="TransformerCompilerStep.cs" />
     <Compile Include="UnderscorNamingConventionsToPascalCaseCompilerStep.cs" />
     <Compile Include="UseSymbolsStep.cs" />
     <Compile Include="AutoImportCompilerStep.cs" />

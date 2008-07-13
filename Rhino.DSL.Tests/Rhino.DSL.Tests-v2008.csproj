@@ -83,6 +83,7 @@
     <Compile Include="SchedulingDSL\SchedulingDslEngine.cs" />
     <Compile Include="SchedulingDSL\SchedulingDSLFixture.cs" />
     <Compile Include="SchedulingDSL\WebSite.cs" />
+    <Compile Include="TransformerCompilerStepTestFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="anotherFile.boo">
