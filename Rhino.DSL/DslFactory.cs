@@ -217,7 +217,7 @@ namespace Rhino.DSL
 			return urls.ToArray();
 		}
 
-		private Predicate<string> GetMatchPathPredicate(string path)
+		private static Predicate<string> GetMatchPathPredicate(string path)
 		{
 			return delegate(string url)
 			{
