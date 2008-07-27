@@ -208,23 +208,11 @@ namespace Rhino.DSL
 		private string[] GetUrlsFromDslEngine(DslEngine engine, ref string path)
 		{
 			string[] matchingUrls = engine.Storage.GetMatchingUrlsIn(BaseDirectory, ref path);
-			List<string> urls = new List<string>();
-			if (matchingUrls != null)
-			{
-				foreach (string url in matchingUrls)
-				{
-					// not in cache, need to this to ensure
-					// that we are not performing batch compilation
-					// for scripts already on the cache (happens if
-					// after the first batch compilation, we added a 
-					// new script)
-					if (engine.Cache.Get(url) == null)
-						urls.Add(url);
-				}
-			}
+			List<string> urls = new List<string>(matchingUrls ?? new string[0]);
 			// even if the path is in the cache, we still return the it
 			// so we will get a new version
-			if (urls.Exists(GetMatchPathPredicate(path)) == false && engine.Storage.IsValidScriptUrl(path))
+			if (urls.Exists(GetMatchPathPredicate(path)) == false &&
+				engine.Storage.IsValidScriptUrl(path))
 				urls.Add(path);
 			return urls.ToArray();
 		}

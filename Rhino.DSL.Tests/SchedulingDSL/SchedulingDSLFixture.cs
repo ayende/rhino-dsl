@@ -13,6 +13,15 @@ namespace Rhino.DSL.Tests.SchedulingDSL
             Assert.AreEqual(2, all.Length);
         }
 
+		[Test]
+		public void CanGetAllDslInstancesInDirectory_WhenCalledMultipleTimes()
+		{
+			BaseScheduler[] all = factory.CreateAll<BaseScheduler>(@"SchedulingDSL\");
+			Assert.AreEqual(2, all.Length);
+			all = factory.CreateAll<BaseScheduler>(@"SchedulingDSL\");
+			Assert.AreEqual(2, all.Length);
+		}
+
         [Test]
 		public void CanCompileFile()
 		{
