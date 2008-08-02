@@ -72,10 +72,20 @@ namespace Rhino.DSL
             CompilerContext compilerContext = compiler.Run();
             if (compilerContext.Errors.Count != 0)
                 throw CreateCompilerException(compilerContext);
+        	HandleWarnings(compilerContext.Warnings);
             return compilerContext;
         }
 
-        /// <summary>
+		/// <summary>
+		/// Allow a derived class to get access to the warnings that occured during 
+		/// compilation
+		/// </summary>
+		/// <param name="warnings">The warnings.</param>
+		protected virtual void HandleWarnings(CompilerWarningCollection warnings)
+		{
+		}
+
+    	/// <summary>
         /// Create an exception that would be raised on compilation errors.
         /// </summary>
         /// <param name="context"></param>
