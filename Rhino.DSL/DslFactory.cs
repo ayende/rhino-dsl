@@ -196,12 +196,12 @@ namespace Rhino.DSL
 					if (type == null)
 						throw new InvalidOperationException("Could not find the generated type for: " + batchUrl);
 					engine.Cache.Set(batchUrl, type);
-					engine.Storage.NotifyOnChange(urls, delegate(string invalidatedUrl)
-					{
-						engine.Cache.Remove(invalidatedUrl);
-						standAloneCompilation.Add(invalidatedUrl);
-					});
 				}
+				engine.Storage.NotifyOnChange(urls, delegate(string invalidatedUrl)
+				{
+					engine.Cache.Remove(invalidatedUrl);
+					standAloneCompilation.Add(invalidatedUrl);
+				});
 			});
 		}
 
