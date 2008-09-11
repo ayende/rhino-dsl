@@ -4,6 +4,7 @@ namespace Rhino.DSL.Tests.SchedulingDSL
     using MbUnit.Framework;
 
     [TestFixture]
+    [Ignore("reason")]
     public class SchedulingDSLFixture : BaseDslFixture<SchedulingDslEngine, BaseScheduler>
 	{
         [Test]

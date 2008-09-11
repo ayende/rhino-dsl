@@ -232,7 +232,6 @@ namespace Rhino.DSL
 			cloned.KeyContainer = parameters.KeyContainer;
 			cloned.KeyFile = parameters.KeyFile;
 			cloned.LibPaths.AddRange(parameters.LibPaths);
-			cloned.MaxAttributeSteps = parameters.MaxAttributeSteps;
 			// cloned.OutputAssembly - we don't want that either
 
 			// always want that, since we are compiling to add a reference
