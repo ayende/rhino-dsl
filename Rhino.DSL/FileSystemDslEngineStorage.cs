@@ -5,6 +5,8 @@ namespace Rhino.DSL
     using System.IO;
     using Boo.Lang.Compiler;
     using Boo.Lang.Compiler.IO;
+    using System.Security.Cryptography;
+    using System.Text;
 
     /// <summary>
     /// Handles the storage requirements for the DSL from a file system.
@@ -136,6 +138,34 @@ namespace Rhino.DSL
         public virtual bool IsValidScriptUrl(string url)
         {
 			return File.Exists(url);
+        }
+
+		/// <summary>
+		/// Given a set of script URLs return a checksum for them
+		/// </summary>
+		/// <param name="dslEngineType">Type of the DSL base.</param>
+		/// <param name="urls">The urls.</param>
+		/// <returns></returns>
+        public virtual string GetChecksumForUrls(Type dslEngineType, IEnumerable<string> urls)
+        {
+        	var buffer = new List<byte>();
+
+          	foreach (string path in urls)
+			{
+				if(File.Exists(path)==false)
+					continue;
+				buffer.AddRange(File.ReadAllBytes(path));
+			}
+			
+			buffer.AddRange(Encoding.UTF8.GetBytes(dslEngineType.AssemblyQualifiedName));
+			var asmFile = new FileInfo(dslEngineType.Assembly.Location);
+			if(asmFile.Exists)
+				buffer.AddRange(BitConverter.GetBytes(asmFile.LastWriteTime.ToBinary()));
+
+			var hash = new SHA256Managed().ComputeHash(buffer.ToArray());
+
+        	return BitConverter.ToString(hash)
+        		.Replace("-", String.Empty);
         }
 
         ///<summary>

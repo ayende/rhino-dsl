@@ -1,17 +1,42 @@
+// Copyright (c) 2005 - 2008 Ayende Rahien (ayende@ayende.com)
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+// 
+//     * Redistributions of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//     * Neither the name of Ayende Rahien nor the names of its
+//     contributors may be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+// THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Rhino.DSL
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Threading;
 
 	/// <summary>
 	/// Provide cache support for a DSL
 	/// </summary>
-	public class DefaultDslEngineCache : IDslEngineCache
+	public class DefaultDslEngineCache : AbstractLockable, IDslEngineCache
 	{
-		private readonly ReaderWriterLock readerWriterLock = new ReaderWriterLock();
 		private readonly IDictionary<string, Type> urlToTypeCache = new Dictionary<string, Type>();
+
+		#region IDslEngineCache Members
 
 		/// <summary>
 		/// Try to get a cached type for this URL.
@@ -20,8 +45,11 @@ namespace Rhino.DSL
 		/// <returns>The compiled DSL or null if not found</returns>
 		public virtual Type Get(string url)
 		{
-			Type result;
-			urlToTypeCache.TryGetValue(url, out result);
+			Type result = null;
+			ReadLock(delegate
+			{
+				urlToTypeCache.TryGetValue(url, out result);				
+			});
 			return result;
 		}
 
@@ -30,7 +58,10 @@ namespace Rhino.DSL
 		/// </summary>
 		public virtual void Set(string url, Type type)
 		{
-			urlToTypeCache[url] = type;
+			WriteLock(delegate
+			{
+				urlToTypeCache[url] = type;				
+			});
 		}
 
 		/// <summary>
@@ -39,51 +70,12 @@ namespace Rhino.DSL
 		/// <param name="url">The URL.</param>
 		public virtual void Remove(string url)
 		{
-			urlToTypeCache.Remove(url);
+			WriteLock(delegate
+			{
+				urlToTypeCache.Remove(url);
+			});
 		}
 
-		/// <summary>
-		/// Execute the action under a write lock
-		/// </summary>
-		/// <param name="cacheAction">The cache action.</param>
-		public void WriteLock(CacheAction cacheAction)
-		{
-			bool readerLockHeld = readerWriterLock.IsReaderLockHeld;
-			LockCookie writerLock = new LockCookie();
-			if (readerLockHeld)
-			{
-				writerLock = readerWriterLock.UpgradeToWriterLock(Timeout.Infinite);
-			}
-			else
-				readerWriterLock.AcquireWriterLock(Timeout.Infinite);
-			try
-			{
-				cacheAction();
-			}
-			finally
-			{
-				if (readerLockHeld)
-					readerWriterLock.DowngradeFromWriterLock(ref writerLock);
-				else
-					readerWriterLock.ReleaseWriterLock();
-			}
-		}
-
-		/// <summary>
-		/// Execute the action under a read lock
-		/// </summary>
-		/// <param name="cacheAction">The cache action.</param>
-		public void ReadLock(CacheAction cacheAction)
-		{
-			readerWriterLock.AcquireReaderLock(Timeout.Infinite);
-			try
-			{
-				cacheAction();
-			}
-			finally
-			{
-				readerWriterLock.ReleaseReaderLock();
-			}
-		}
+		#endregion
 	}
 }

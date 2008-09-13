@@ -5,6 +5,7 @@ namespace Rhino.DSL
     using System.Reflection;
     using Boo.Lang.Compiler;
     using Boo.Lang.Compiler.Pipelines;
+    using System.IO;
 
     /// <summary>
     /// Base class for DSL engines, handles most of the routine tasks that a DSL
@@ -20,8 +21,8 @@ namespace Rhino.DSL
         /// </summary>
         public DslEngine()
         {
-            storage = new FileSystemDslEngineStorage();
-            cache = new DefaultDslEngineCache();
+            Storage = new FileSystemDslEngineStorage();
+            Cache = new DefaultDslEngineCache();
         }
 
 
@@ -42,7 +43,11 @@ namespace Rhino.DSL
         public IDslEngineStorage Storage
         {
             get { return storage; }
-            set { storage = value; }
+            set 
+			{
+                storage = value;
+                CompilerContextCache = new DslCompilerContextCache(storage);
+            }
         }
 
         /// <summary>
@@ -63,29 +68,47 @@ namespace Rhino.DSL
         /// <returns>The resulting compiler context</returns>
         public virtual CompilerContext Compile(params string[] urls)
         {
+            return CompilerContextCache.GetCached(this, urls);
+        }
+
+        /// <summary>
+        /// Compiler context cache
+        /// </summary>
+        public DslCompilerContextCache CompilerContextCache { get; set;}
+
+		/// <summary>
+		/// Force a compile with no caching
+		/// </summary>
+		/// <param name="urls">The urls.</param>
+		/// <param name="cacheFileName">Name of the cache file.</param>
+		/// <returns></returns>
+        public virtual CompilerContext ForceCompile(string[] urls, string cacheFileName)
+        {
             BooCompiler compiler = new BooCompiler();
             compiler.Parameters.OutputType = CompilerOutputType;
             compiler.Parameters.GenerateInMemory = true;
-            compiler.Parameters.Pipeline = new CompileToMemory();
-            CustomizeCompiler(compiler, compiler.Parameters.Pipeline, urls);
+            compiler.Parameters.Pipeline = new CompileToFile();
+        	compiler.Parameters.OutputAssembly = cacheFileName;
+			CustomizeCompiler(compiler, compiler.Parameters.Pipeline, urls);
             AddInputs(compiler, urls);
             CompilerContext compilerContext = compiler.Run();
             if (compilerContext.Errors.Count != 0)
                 throw CreateCompilerException(compilerContext);
-        	HandleWarnings(compilerContext.Warnings);
+            HandleWarnings(compilerContext.Warnings);
+
             return compilerContext;
         }
 
-		/// <summary>
-		/// Allow a derived class to get access to the warnings that occured during 
-		/// compilation
-		/// </summary>
-		/// <param name="warnings">The warnings.</param>
-		protected virtual void HandleWarnings(CompilerWarningCollection warnings)
-		{
-		}
+        /// <summary>
+        /// Allow a derived class to get access to the warnings that occured during 
+        /// compilation
+        /// </summary>
+        /// <param name="warnings">The warnings.</param>
+        protected virtual void HandleWarnings(CompilerWarningCollection warnings)
+        {
+        }
 
-    	/// <summary>
+        /// <summary>
         /// Create an exception that would be raised on compilation errors.
         /// </summary>
         /// <param name="context"></param>
@@ -100,10 +123,10 @@ namespace Rhino.DSL
         {
             foreach (string url in urls)
             {
-            	ICompilerInput input = Storage.CreateInput(url);
-				if(input==null)
-					throw new InvalidOperationException("Got a null input for url: " + url);
-            	compiler.Parameters.Input.Add(input);
+                ICompilerInput input = Storage.CreateInput(url);
+                if (input == null)
+                    throw new InvalidOperationException("Got a null input for url: " + url);
+                compiler.Parameters.Input.Add(input);
             }
         }
 
@@ -133,5 +156,5 @@ namespace Rhino.DSL
             string className = Storage.GetTypeNameFromUrl(url);
             return assembly.GetType(className, false, true);
         }
-    }
+   }
 }

@@ -32,17 +32,17 @@ namespace Rhino.DSL
         /// <param name="url">The url</param>
         /// <returns>The compiler input</returns>
         ICompilerInput CreateInput(string url);
-        
-        /// <summary>
-        /// Determines whether the URL is included in the specified urls
-        /// in the given parent path
-        /// </summary>
-        /// <param name="urls">The urls.</param>
-        /// <param name="parentPath">The parent oath.</param>
-        /// <param name="url">The URL.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is URL include in] [the specified urls]; otherwise, <c>false</c>.
-        /// </returns>
+
+		/// <summary>
+		/// Determines whether the URL is included in the specified urls
+		/// in the given parent path
+		/// </summary>
+		/// <param name="urls">The urls.</param>
+		/// <param name="parentPath">The parent oath.</param>
+		/// <param name="url">The URL.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is URL include in] [the specified urls]; otherwise, <c>false</c>.
+		/// </returns>
         bool IsUrlIncludeIn(string[] urls, string parentPath, string url);
 
         /// <summary>
@@ -56,5 +56,13 @@ namespace Rhino.DSL
         /// Determains whatever the given url is a valid script url.
         /// </summary>
         bool IsValidScriptUrl(string url);
+
+		/// <summary>
+		/// Given a set of script URLs return a checksum for them taking into account their location and their contents
+		/// </summary>
+		/// <param name="dslEngineType">Type of the DSL base.</param>
+		/// <param name="urls">The urls.</param>
+		/// <returns></returns>
+        string GetChecksumForUrls(Type dslEngineType, IEnumerable<string> urls);
     }
 }
