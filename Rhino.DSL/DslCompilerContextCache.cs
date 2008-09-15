@@ -60,7 +60,7 @@ namespace Rhino.DSL
 		{
 			if (urls == null || urls.Length == 0) throw new ArgumentNullException("urls");
 
-			var cacheFileName = GetCacheFileName(engine, urls);
+			string cacheFileName = GetCacheFileName(engine, urls);
 			CompilerContext context = LoadCompilerContext(cacheFileName);
 
 			if (context == null)
@@ -78,7 +78,7 @@ namespace Rhino.DSL
 
 		private string GetCacheFileName(DslEngine engine, string[] urls)
 		{
-			var fileName = storage.GetChecksumForUrls(engine.GetType(), urls) + ".boocache";
+			string fileName = storage.GetChecksumForUrls(engine.GetType(), urls) + ".boocache";
 			return Path.Combine(Path.GetTempPath(), fileName);
 		}
 
@@ -94,14 +94,17 @@ namespace Rhino.DSL
 				{
 					WriteLock(delegate
 					{
-						var bytes = File.ReadAllBytes(file);
+						byte[] bytes = File.ReadAllBytes(file);
 						assembly = Assembly.Load(bytes);
 						assemblyCache[file] = assembly;
 						AssemblyLoaded(file, assembly, true);
 					});
 				}
 			});
-			return new CompilerContext {GeneratedAssembly = assembly};
+			
+			CompilerContext context = new CompilerContext();
+			context.GeneratedAssembly = assembly;
+			return context;
 		}
 
 		/// <summary>

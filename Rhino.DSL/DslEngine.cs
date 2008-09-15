@@ -15,6 +15,7 @@ namespace Rhino.DSL
     {
         private IDslEngineStorage storage;
         private IDslEngineCache cache;
+		private DslCompilerContextCache compilerContextCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DslEngine"/> class.
@@ -74,7 +75,11 @@ namespace Rhino.DSL
         /// <summary>
         /// Compiler context cache
         /// </summary>
-        public DslCompilerContextCache CompilerContextCache { get; set;}
+        public DslCompilerContextCache CompilerContextCache 
+		{ 
+			get { return compilerContextCache; }
+			set { compilerContextCache = value; }
+		}
 
 		/// <summary>
 		/// Force a compile with no caching

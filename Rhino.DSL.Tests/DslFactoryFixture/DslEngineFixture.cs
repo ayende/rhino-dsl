@@ -2,6 +2,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 {
 	using System;
 	using System.IO;
+	using System.Reflection;
 	using Boo.Lang.Compiler;
 	using MbUnit.Framework;
 	using Boo.Lang.Compiler.Ast;
@@ -20,7 +21,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 		[TearDown]
 		public void TearDown()
 		{
-			foreach (var file in Directory.GetFiles(Path.GetTempPath(), "*.boocache"))
+			foreach (string file in Directory.GetFiles(Path.GetTempPath(), "*.boocache"))
 			{
 				File.Delete(file);
 			}
@@ -45,12 +46,11 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 		[Test]
 		public void Dsl_engine_can_take_parameters()
 		{
-			var _Factory = new DslFactory
-			{
-				BaseDirectory = AppDomain.CurrentDomain.BaseDirectory
-			};
+			DslFactory _Factory = new DslFactory();
+			_Factory.BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			
 			_Factory.Register<MyClassWithParams>(new DslEngineWithParameters());
-			var classWithParams = _Factory.Create<MyClassWithParams>("DslFactoryFixture\\ScriptWithParameter.boo");
+			MyClassWithParams classWithParams = _Factory.Create<MyClassWithParams>("DslFactoryFixture\\ScriptWithParameter.boo");
 			Assert.AreEqual("World", classWithParams.Hello("World"));
 		}
 
@@ -62,7 +62,8 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 
 			string lastCachedFilePath = null;
 
-			engine.CompilerContextCache.AssemblyLoaded += (filename, assembly, fromCache) => lastCachedFilePath = filename;
+			engine.CompilerContextCache.AssemblyLoaded += delegate (string filename, Assembly assembly, bool fromCache) 
+				{ lastCachedFilePath = filename; };
 			engine.Compile(scriptPath);
 			Assert.IsFalse(lastCachedFilePath == null);
 
@@ -79,8 +80,9 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 			string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\engine_recompiles_on_script_change.boo"));
 			string lastCachedFilePath = null;
 
-			engine.CompilerContextCache.AssemblyLoaded += (filename, assembly, fromCache) => lastCachedFilePath = filename;
-
+			engine.CompilerContextCache.AssemblyLoaded += delegate (string filename, Assembly assembly, bool fromCache) 
+				{ lastCachedFilePath = filename; };
+			
 			File.WriteAllText(scriptPath, "print 1");
 			engine.Compile(scriptPath);
 			Assert.IsFalse(lastCachedFilePath == null);
@@ -101,8 +103,9 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 
 			string lastCachedFilePath = null;
 
-			engine.CompilerContextCache.AssemblyLoaded += (filename, assembly, fromCache) => lastCachedFilePath = filename;
-
+			engine.CompilerContextCache.AssemblyLoaded += delegate (string filename, Assembly assembly, bool fromCache) 
+				{ lastCachedFilePath = filename; };
+			
 			engine.Compile(scriptPath1);
 			Assert.IsFalse(lastCachedFilePath == null);
 			lastCachedFilePath = null;
@@ -121,7 +124,8 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 
 			string lastCachedFilePath = null;
 
-			engine.CompilerContextCache.AssemblyLoaded += (filename, assembly, fromCache) => lastCachedFilePath = filename;
+			engine.CompilerContextCache.AssemblyLoaded += delegate (string filename, Assembly assembly, bool fromCache) 
+				{ lastCachedFilePath = filename; };
 
 			engine.Compile(scriptPath1, scriptPath2);
 			Assert.IsFalse(lastCachedFilePath == null);
@@ -149,8 +153,8 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 	{
 		protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
 		{
-			var parameters = new ParameterDeclarationCollection();
-			var newParameterDeclaration =
+			ParameterDeclarationCollection parameters = new ParameterDeclarationCollection();
+			ParameterDeclaration newParameterDeclaration =
 				new ParameterDeclaration("input", new SimpleTypeReference("System.String"));
 			parameters.Add(newParameterDeclaration);
 

@@ -148,11 +148,11 @@ namespace Rhino.DSL
 		/// <returns></returns>
         public virtual string GetChecksumForUrls(Type dslEngineType, IEnumerable<string> urls)
         {
-        	var buffer = new List<byte>();
+        	List<byte> buffer = new List<byte>();
 
           	foreach (string path in urls)
 			{
-				var file = new FileInfo(path);
+				FileInfo file = new FileInfo(path);
 				if(file.Exists==false)
 					continue;
 				buffer.AddRange(Encoding.UTF8.GetBytes(file.Name));
@@ -160,11 +160,11 @@ namespace Rhino.DSL
 			}
 			
 			buffer.AddRange(Encoding.UTF8.GetBytes(dslEngineType.AssemblyQualifiedName));
-			var asmFile = new FileInfo(dslEngineType.Assembly.Location);
+			FileInfo asmFile = new FileInfo(dslEngineType.Assembly.Location);
 			if(asmFile.Exists)
 				buffer.AddRange(BitConverter.GetBytes(asmFile.LastWriteTime.ToBinary()));
 
-			var hash = new SHA256Managed().ComputeHash(buffer.ToArray());
+			byte[] hash = new SHA256Managed().ComputeHash(buffer.ToArray());
 
         	return BitConverter.ToString(hash)
         		.Replace("-", String.Empty);
