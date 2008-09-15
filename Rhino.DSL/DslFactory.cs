@@ -110,7 +110,7 @@ namespace Rhino.DSL
 			Type type = null;
 			engine.Cache.ReadLock(delegate
 			{
-				type = engine.Cache.Get(url);
+				type = engine.Cache.Get(engine.CanonizeUrl(url));
 				if (type == null)
 				{
 					bool recompilation;

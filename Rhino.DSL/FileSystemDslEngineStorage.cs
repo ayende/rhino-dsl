@@ -152,9 +152,11 @@ namespace Rhino.DSL
 
           	foreach (string path in urls)
 			{
-				if(File.Exists(path)==false)
+				var file = new FileInfo(path);
+				if(file.Exists==false)
 					continue;
-				buffer.AddRange(File.ReadAllBytes(path));
+				buffer.AddRange(Encoding.UTF8.GetBytes(file.Name));
+				buffer.AddRange(BitConverter.GetBytes(file.LastWriteTime.ToBinary()));
 			}
 			
 			buffer.AddRange(Encoding.UTF8.GetBytes(dslEngineType.AssemblyQualifiedName));

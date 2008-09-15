@@ -12,14 +12,10 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     {
         private string testUrl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test");
 
-        private readonly string testUrl2 =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("test2", "test"));
-
         private CompilerContext context;
         private DslFactory factory;
         private DslEngine mockedDslEngine;
         private MockRepository mocks;
-        private string parentDirectory;
         private IDslEngineCache mockCache;
 
         [SetUp]
@@ -44,7 +40,6 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             Assembly assembly = Assembly.GetCallingAssembly();
             context = new CompilerContext();
             context.GeneratedAssembly = assembly;
-            parentDirectory = Path.GetDirectoryName(testUrl);
             mockedDslEngine.Storage = mockStorage;
             mockedDslEngine.Cache = mockCache;
 
@@ -71,7 +66,6 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
         {
             using (mocks.Record())
             {
-                Expect.Call(mockCache.Get(testUrl)).Return(null);
                 SetupResult.For(mockedDslEngine.GetTypeForUrl(null, null))
                     .IgnoreArguments()
                     .Return(typeof (DslEngine));

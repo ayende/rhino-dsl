@@ -156,5 +156,13 @@ namespace Rhino.DSL
             string className = Storage.GetTypeNameFromUrl(url);
             return assembly.GetType(className, false, true);
         }
-   }
+
+		/// <summary>
+		/// Canonizes the URL to a consistent form.
+		/// </summary>
+    	public virtual string CanonizeUrl(string url)
+    	{
+    		return Path.GetFullPath(url);
+    	}
+    }
 }
