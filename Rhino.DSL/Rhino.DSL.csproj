@@ -54,8 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractLockable.cs" />
     <Compile Include="BaseClassCompilerStep.cs" />
     <Compile Include="DefaultDslEngineCache.cs" />
+    <Compile Include="DslCompilerContextCache.cs" />
     <Compile Include="FileSystemDslEngineStorage.cs" />
     <Compile Include="IDslEngineCache.cs" />
     <Compile Include="IDslEngineStorage.cs" />
