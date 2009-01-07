@@ -14,7 +14,7 @@ namespace Rhino.DSL.Tests.OrderDSL
                                                                //default namespaces
                                                                "Rhino.DSL.Tests.SchedulingDSL"));
 			pipeline.InsertBefore(typeof (ProcessMethodBodiesWithDuckTyping),
-							 new UnderscorNamingConventionsToPascalCaseCompilerStep());
+							 new UnderscoreNamingConventionsToPascalCaseCompilerStep());
         }
     }
 }

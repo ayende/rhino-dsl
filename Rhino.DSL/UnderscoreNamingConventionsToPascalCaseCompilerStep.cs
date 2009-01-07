@@ -15,10 +15,10 @@ namespace Rhino.DSL
 	/// <code>
 	/// compiler.Parameters.Pipeline
 	///		.InsertBefore(typeof (ProcessMethodBodiesWithDuckTyping),
-	/// 				 new UnderscorNamingConventionsToPascalCaseCompilerStep());
+	/// 				 new UnderscoreNamingConventionsToPascalCaseCompilerStep());
 	/// </code>
 	/// </example>
-	public class UnderscorNamingConventionsToPascalCaseCompilerStep : AbstractVisitorCompilerStep
+	public class UnderscoreNamingConventionsToPascalCaseCompilerStep : AbstractVisitorCompilerStep
 	{
 		/// <summary>
 		/// Called when we encounter a reference expression

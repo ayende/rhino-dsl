@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Rhino.DSL.DslEngine">
+    <Position X="0.5" Y="0.5" Width="2.5" />
+    <Members>
+      <Method Name="AddInputs" Hidden="true" />
+      <Field Name="cache" Hidden="true" />
+      <Field Name="compilerContextCache" Hidden="true" />
+      <Field Name="storage" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ACAAhAAgAIAAAACAAAAAAACEAAAQAAAAABADAAAAAkA=</HashCode>
+      <FileName>DslEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.DSL.DslFactory">
+    <Position X="3.75" Y="0.5" Width="3.25" />
+    <Members>
+      <Field Name="baseDirectory" Hidden="true" />
+      <Method Name="CreateInternal" Hidden="true" />
+      <Method Name="GetEngine" Hidden="true" />
+      <Method Name="GetMatchPathPredicate" Hidden="true" />
+      <Method Name="GetUrls" Hidden="true" />
+      <Method Name="GetUrlsFromDslEngine" Hidden="true" />
+      <Method Name="RaiseCompilationEvent" Hidden="true" />
+      <Method Name="RegisterBatchInCache" Hidden="true" />
+      <Field Name="standAloneCompilation" Hidden="true" />
+      <Field Name="typeToDslEngine" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Enum Name="Rhino.DSL.DslFactory.ScriptNotFoundBehavior" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DslFactory.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgCAggAAAAAAABAAAAAAAAIAAARAUAAAIMGAADgAAA=</HashCode>
+      <FileName>DslFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

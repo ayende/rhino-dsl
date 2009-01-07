@@ -65,7 +65,7 @@
     <Compile Include="IDslEngineStorage.cs" />
     <Compile Include="MethodSubstitutionBaseClassCompilerStep.cs" />
     <Compile Include="TransformerCompilerStep.cs" />
-    <Compile Include="UnderscorNamingConventionsToPascalCaseCompilerStep.cs" />
+    <Compile Include="UnderscoreNamingConventionsToPascalCaseCompilerStep.cs" />
     <Compile Include="UseSymbolsStep.cs" />
     <Compile Include="AutoImportCompilerStep.cs" />
     <Compile Include="AutoReferenceFilesCompilerStep.cs" />
@@ -78,6 +78,7 @@
     <None Include="..\..\ayende-open-source.snk">
       <Link>ayende-open-source.snk</Link>
     </None>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
