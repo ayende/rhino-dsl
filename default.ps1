@@ -57,8 +57,8 @@ task Test -depends Compile {
 
 task Release -depends Test {
 	& $tools_dir\zip.exe -9 -A -j `
-		$release_dir\Rhino.DSL.zip `
-		$build_dir\Rhino.DSL-$humanReadableversion-Build-$env:ccnetnumericlabel.dll `
+		$release_dir\Rhino.DSL-$humanReadableversion-Build-$env:ccnetnumericlabel.zip `
+		$build_dir\Rhino.DSL.dll `
 		$build_dir\Rhino.DSL.xml `
 		license.txt `
 		acknowledgements.txt `
