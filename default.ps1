@@ -5,6 +5,7 @@ properties {
   $buildartifacts_dir = "$build_dir\" 
   $sln_file = "$base_dir\Rhino.DSL-vs2008.sln" 
   $version = "1.0.0.0"
+  $humanReadableversion = "1.0"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-DSL"
