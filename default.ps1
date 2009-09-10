@@ -7,6 +7,8 @@ properties {
   $version = "1.0.0.0"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
+  $uploadCategory = "Rhino-DSL"
+  $uploadScript = "C:\Builds\Upload\PublishBuild.build"
 } 
 
 task default -depends Release
@@ -54,8 +56,28 @@ task Test -depends Compile {
 }
 
 task Release -depends Test {
-	& $tools_dir\zip.exe -9 -A -j $release_dir\Rhino.DSL.zip $build_dir\Rhino.DSL.dll $build_dir\Rhino.DSL.xml license.txt acknowledgements.txt $build_dir\Boo.*.dll
+	& $tools_dir\zip.exe -9 -A -j `
+		$release_dir\Rhino.DSL.zip `
+		$build_dir\Rhino.DSL-$humanReadableversion-Build-$env:ccnetnumericlabel.dll `
+		$build_dir\Rhino.DSL.xml `
+		license.txt `
+		acknowledgements.txt `
+		$build_dir\Boo.*.dll
 	if ($lastExitCode -ne 0) {
         throw "Error: Failed to execute ZIP command"
     }
+}
+
+task Upload -depend Release {
+	if (Test-Path $uploadScript ) {
+		$log = git log -n 1 --oneline		
+		msbuild $uploadScript /p:Category=$uploadCategory "/p:Comment=$log" "/p:File=$release_dir\Rhino.DSL-$humanReadableversion-Build-$env:ccnetnumericlabel.zip"
+		
+		if ($lastExitCode -ne 0) {
+			throw "Error: Failed to publish build"
+		}
+	}
+	else {
+		Write-Host "could not find upload script $uploadScript, skipping upload"
+	}
 }
