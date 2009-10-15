@@ -37,10 +37,10 @@ namespace Rhino.DSL
             }
             else if(
                 macro.Arguments.Count == 0 &&
-                macro.Block != null && 
-                macro.Block.HasStatements)//use the macro block
+                macro.Body != null &&
+				macro.Body.IsEmpty == false)//use the macro block
             {
-                property.Getter.Body = macro.Block;
+				property.Getter.Body = macro.Body;
             }
             else
             {

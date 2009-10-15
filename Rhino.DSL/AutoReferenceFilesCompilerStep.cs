@@ -147,7 +147,7 @@ namespace Rhino.DSL
 			//we may need to preserve this, since it may be used in several compiler cycles.
 			//which will set them to different things
 			CompilerErrorCollection errors = Errors;
-			AssemblyCollection references = Parameters.References;
+			CompilerReferenceCollection references = Parameters.References;
 			string url = GetFilePath(node);
 
 			Assembly assembly;

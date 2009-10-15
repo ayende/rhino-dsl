@@ -42,14 +42,14 @@ namespace Rhino.DSL
 		public override void OnMacroStatement(MacroStatement node)
 		{
 			if (Array.Exists(methods,
-							 delegate(string name) { return name.Equals(node.Name); }))
+			                 name => name.Equals(node.Name)))
 			{
-				if (node.Block != null)
+				if (node.Body != null)
 				{
-					Expression[] expressions = GetExpressionsFromBlock(node.Block);
+					Expression[] expressions = GetExpressionsFromBlock(node.Body);
 					foreach (Expression expression in expressions)
 						node.Arguments.Add(expression);
-					node.Block.Clear();
+					node.Body.Clear();
 				}
 			}
 			base.OnMacroStatement(node);
@@ -66,7 +66,7 @@ namespace Rhino.DSL
 				{
 					MacroStatement macroStatement = statement as MacroStatement;
 					if (macroStatement.Arguments.Count == 0 &&
-						!macroStatement.Block.HasStatements)
+						macroStatement.Body.IsEmpty)
 					{
 						// Assume it is a reference expression
 						ReferenceExpression refExp = new ReferenceExpression(macroStatement.LexicalInfo);
@@ -80,13 +80,13 @@ namespace Rhino.DSL
 						mie.Target = new ReferenceExpression(macroStatement.LexicalInfo, macroStatement.Name);
 						mie.Arguments = macroStatement.Arguments;
 
-						if (macroStatement.Block.HasStatements)
+						if (macroStatement.Block.IsEmpty == false)
 						{
 							// If the macro statement has a block,                      
 							// transform it into a block expression and pass that as the last argument                     
 							// to the method invocation.
 							BlockExpression be = new BlockExpression(macroStatement.LexicalInfo);
-							be.Body = macroStatement.Block.CloneNode();
+							be.Body = macroStatement.Body.CloneNode();
 
 							mie.Arguments.Add(be);
 						}

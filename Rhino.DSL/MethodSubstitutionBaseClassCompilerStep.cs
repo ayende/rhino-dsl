@@ -112,7 +112,7 @@ namespace Rhino.DSL
 				{
 					Method method = new Method(node.LexicalInfo);
 					method.Name = node.Name;
-					method.Body = node.Block.CloneNode();
+					method.Body = node.Body.CloneNode();
 
 					classDefinition.Members.Add(method);
 
