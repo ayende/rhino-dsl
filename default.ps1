@@ -9,7 +9,7 @@ properties {
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-DSL"
-  $uploadScript = "C:\Builds\Upload\PublishBuild.build"
+  $uploader = "..\Uploader\S3Uploader.exe"
 } 
 
 task default -depends Release
