@@ -2,26 +2,25 @@ namespace Rhino.DSL.Tests.OrderDSL
 {
     using System.Reflection;
     using Boo.Lang.Compiler.Pipelines;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
     public class OrderDSLFixture : BaseDslFixture<OrderActionsDslEngine, BaseOrderActionsDSL>
     {
-        [Test]
+        [Fact]
         public void CanCompile()
         {
-            Assert.IsNotNull(factory.Create<BaseOrderActionsDSL>(@"OrderDSL\OrderBusinessRules.boo"));
+            Assert.NotNull(factory.Create<BaseOrderActionsDSL>(@"OrderDSL\OrderBusinessRules.boo"));
         }
 
-		[Test]
+		[Fact]
 		public void CanCompile_WithDifferentOperations()
 		{
 			BaseOrderActionsDSL dsl = factory.Create<BaseOrderActionsDSL>(@"OrderDSL\OrderBusinessRules_DifferentOperations.boo");
-			Assert.IsNotNull(dsl);
+			Assert.NotNull(dsl);
 		}
 
 
-    	[Test]
+    	[Fact]
         public void
             When_User_is_preferred_and_Order_total_cost_is_above_1000_should_apply_free_shipping_and_5_precent_discount()
         {
@@ -34,12 +33,12 @@ namespace Rhino.DSL.Tests.OrderDSL
             instance.Prepare();
             instance.Execute();
 
-            Assert.AreEqual(5m, instance.discountPrecentage);
-            Assert.IsTrue(instance.shouldApplyFreeShipping);
-            Assert.IsFalse(instance.shouldSuggestUpgradeToPreferred);
+            Assert.Equal(5m, instance.discountPrecentage);
+            Assert.True(instance.shouldApplyFreeShipping);
+            Assert.False(instance.shouldSuggestUpgradeToPreferred);
         }
 
-        [Test]
+        [Fact]
         public void
             When_User_is_not_preferred_and_order_total_cost_above_100_should_apply_for_free_shipping_and_suggest_upgrade_to_preferred
             ()
@@ -53,12 +52,12 @@ namespace Rhino.DSL.Tests.OrderDSL
             instance.Prepare();
             instance.Execute();
 
-            Assert.AreEqual(0m, instance.discountPrecentage);
-            Assert.IsTrue(instance.shouldApplyFreeShipping);
-            Assert.IsTrue(instance.shouldSuggestUpgradeToPreferred);
+            Assert.Equal(0m, instance.discountPrecentage);
+            Assert.True(instance.shouldApplyFreeShipping);
+            Assert.True(instance.shouldSuggestUpgradeToPreferred);
         }
 
-        [Test]
+        [Fact]
         public void When_User_is_not_preferred_and_order_total_cost_is_above_500_should_apply_for_free_shipping()
         {
             BaseOrderActionsDSL instance =
@@ -70,9 +69,9 @@ namespace Rhino.DSL.Tests.OrderDSL
             instance.Prepare();
             instance.Execute();
 
-            Assert.AreEqual(0m, instance.discountPrecentage);
-            Assert.IsTrue(instance.shouldApplyFreeShipping);
-            Assert.IsFalse(instance.shouldSuggestUpgradeToPreferred);
+            Assert.Equal(0m, instance.discountPrecentage);
+            Assert.True(instance.shouldApplyFreeShipping);
+            Assert.False(instance.shouldSuggestUpgradeToPreferred);
         }
     }
 }

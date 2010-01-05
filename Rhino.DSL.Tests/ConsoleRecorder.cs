@@ -2,7 +2,7 @@ namespace Rhino.DSL.Tests
 {
     using System;
     using System.IO;
-    using MbUnit.Framework;
+    using Xunit;
 
     public class ConsoleRecorder : IDisposable
     {
@@ -23,7 +23,7 @@ namespace Rhino.DSL.Tests
 
         public void AssertEquals(string expected)
         {
-            Assert.AreEqual(expected, Result);
+            Assert.Equal(expected, Result);
         }
 
         public void Dispose()

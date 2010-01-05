@@ -4,22 +4,19 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 	using System.IO;
 	using System.Reflection;
 	using Boo.Lang.Compiler;
-	using MbUnit.Framework;
+	using Xunit;
 	using Boo.Lang.Compiler.Ast;
 
-	[TestFixture]
-	public class DslEngineFixture
+	public class DslEngineFixture : IDisposable
 	{
 		private MyDslEngine engine;
 
-		[SetUp]
-		public void SetUp()
+		public DslEngineFixture()
 		{
 			engine = new MyDslEngine();
 		}
 
-		[TearDown]
-		public void TearDown()
+		public void Dispose()
 		{
 			foreach (string file in Directory.GetFiles(Path.GetTempPath(), "*.boocache"))
 			{
@@ -27,23 +24,23 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void When_DSL_engine_is_asked_to_create_a_DSL_it_will_compile_and_return_the_compiler_context()
 		{
 			string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\MyDsl.boo"));
 			CompilerContext compilerContext = engine.Compile(path);
-			Assert.AreEqual(0, compilerContext.Errors.Count);
-			Assert.IsNotNull(compilerContext.GeneratedAssembly);
+			Assert.Equal(0, compilerContext.Errors.Count);
+			Assert.NotNull(compilerContext.GeneratedAssembly);
 		}
 
-		[Test]
-		[ExpectedException(typeof(CompilerError))]
+		[Fact]
 		public void When_compilation_result_in_an_error_should_throw()
 		{
-			engine.Compile(Path.GetFullPath(@"somethingThatDoesNotExists.boo"));
+		    Assert.Throws<CompilerError>(() =>
+		                                 engine.Compile(Path.GetFullPath(@"somethingThatDoesNotExists.boo")));
 		}
 
-		[Test]
+		[Fact]
 		public void Dsl_engine_can_take_parameters()
 		{
 			DslFactory _Factory = new DslFactory();
@@ -51,10 +48,10 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 			
 			_Factory.Register<MyClassWithParams>(new DslEngineWithParameters());
 			MyClassWithParams classWithParams = _Factory.Create<MyClassWithParams>("DslFactoryFixture\\ScriptWithParameter.boo");
-			Assert.AreEqual("World", classWithParams.Hello("World"));
+			Assert.Equal("World", classWithParams.Hello("World"));
 		}
 
-		[Test]
+		[Fact]
 		public void engine_reuses_first_compile()
 		{
 			string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\engine_reuses_first_compile.boo"));
@@ -65,16 +62,16 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 			engine.CompilerContextCache.AssemblyLoaded += delegate (string filename, Assembly assembly, bool fromCache) 
 				{ lastCachedFilePath = filename; };
 			engine.Compile(scriptPath);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 
 			lastCachedFilePath = null;
 
 			engine.Compile(scriptPath);
-			Assert.IsTrue(lastCachedFilePath == null);
+			Assert.True(lastCachedFilePath == null);
 
 		}
 
-		[Test]
+		[Fact]
 		public void engine_recompiles_on_script_change()
 		{
 			string scriptPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\engine_recompiles_on_script_change.boo"));
@@ -85,14 +82,14 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 			
 			File.WriteAllText(scriptPath, "print 1");
 			engine.Compile(scriptPath);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 			lastCachedFilePath = null;
 			File.WriteAllText(scriptPath, "print 2");
 			engine.Compile(scriptPath);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 		}
 
-		[Test]
+		[Fact]
 		public void engine_recompiles_on_script_add()
 		{
 			string scriptPath1 = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\engine_recompiles_on_script_add1.boo"));
@@ -107,13 +104,13 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 				{ lastCachedFilePath = filename; };
 			
 			engine.Compile(scriptPath1);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 			lastCachedFilePath = null;
 			engine.Compile(scriptPath1, scriptPath2);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 		}
 
-		[Test]
+		[Fact]
 		public void engine_recompiles_on_script_remove()
 		{
 			string scriptPath1 = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\engine_recompiles_on_script_remove1.boo"));
@@ -128,11 +125,11 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 				{ lastCachedFilePath = filename; };
 
 			engine.Compile(scriptPath1, scriptPath2);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 			
 			lastCachedFilePath = null;
 			engine.Compile(scriptPath1);
-			Assert.IsFalse(lastCachedFilePath == null);
+			Assert.False(lastCachedFilePath == null);
 		}
 	}
 

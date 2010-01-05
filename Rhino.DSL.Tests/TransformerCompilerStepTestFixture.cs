@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Boo.Lang.Compiler;
 using Boo.Lang.Compiler.Ast;
-using MbUnit.Framework;
+using Xunit;
 
 namespace Rhino.DSL.Tests
 {
-	[TestFixture]
 	public class TransformerCompilerStepTestFixture
 	{
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[Fact]
 		public void CtorRequiresNonNullArgument()
 		{
-			new TransformerCompilerStep(null);
+            Assert.Throws<ArgumentNullException>(()=>new TransformerCompilerStep(null));
 		}
 
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		[Fact]
 		public void CtorRequiresAtLeastOneTransformer()
 		{
-			new TransformerCompilerStep(new DepthFirstTransformer[] {});
-		}
+            Assert.Throws<ArgumentException>(() => new TransformerCompilerStep(new DepthFirstTransformer[] { }));
+        }
 
-		[Test]
+		[Fact]
 		public void TransformerIsAppliedToCompileUnit()
 		{
 			StubTransformer transformer = new StubTransformer();
@@ -38,7 +33,7 @@ namespace Rhino.DSL.Tests
 			compiler.Parameters.Pipeline.Insert(0, transformerStep);
 			compiler.Run(unit);
 
-			Assert.IsTrue(transformer.CompileUnitVisited);
+			Assert.True(transformer.CompileUnitVisited);
 		}
 
 		private class StubTransformer: DepthFirstTransformer

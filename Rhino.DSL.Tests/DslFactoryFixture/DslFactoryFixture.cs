@@ -4,10 +4,9 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     using System.IO;
     using System.Reflection;
     using Boo.Lang.Compiler;
-    using MbUnit.Framework;
+    using Xunit;
     using Mocks;
 
-    [TestFixture]
     public class DslFactoryFixture
     {
         private string testUrl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "test");
@@ -18,8 +17,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
         private MockRepository mocks;
         private IDslEngineCache mockCache;
 
-        [SetUp]
-        public void SetUp()
+        public DslFactoryFixture()
         {
             factory = new DslFactory();
             mocks = new MockRepository();
@@ -54,14 +52,14 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     		action();
     	}
 
-    	[Test]
+    	[Fact]
         public void Can_register_a_dsl_engine_for_base_type()
         {
             factory.Register<IDisposable>(mockedDslEngine);
-            Assert.IsTrue(factory.IsRegistered<IDisposable>());
+            Assert.True(factory.IsRegistered<IDisposable>());
         }
 
-        [Test]
+        [Fact]
         public void When_requesting_a_DSL_instance_will_first_try_to_get_from_cache()
         {
             using (mocks.Record())
@@ -84,15 +82,13 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             }
         }
 
-        [Test]
-        [ExpectedException(typeof (InvalidOperationException),
-            "Could not find an engine to process type: System.IDisposable")]
+        [Fact]
         public void When_try_to_get_a__non_existant_dsl_should_throw()
         {
-            factory.Create<IDisposable>(testUrl);
+            Assert.Throws<InvalidOperationException>("Could not find an engine to process type: System.IDisposable", () => factory.Create<IDisposable>(testUrl));
         }
 
-        [Test]
+        [Fact]
         public void When_request_a_DSL_isntance_will_ask_engine_to_create_it()
         {
             using (mocks.Record())
@@ -116,7 +112,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             }
         }
 
-        [Test]
+        [Fact]
         public void When_DSL_engine_successfully_compiled_will_register_all_types_in__the_cache()
         {
             using (mocks.Record())
@@ -133,8 +129,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             }
         }
 
-        [Test]
-        [ExpectedException(typeof (InvalidOperationException))]
+        [Fact]
         public void When_Type_does_not_exist_in_compiled_assembly_should_thorw()
         {
             using (mocks.Record())
@@ -146,11 +141,11 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             factory.Register<IDisposable>(mockedDslEngine);
             using (mocks.Playback())
             {
-                factory.Create<IDisposable>(testUrl);
+                Assert.Throws<InvalidOperationException>(() => factory.Create<IDisposable>(testUrl));
             }
         }
 
-        [Test]
+        [Fact]
         public void When_create_a_DSL_instance_should_ask_engine_to_create_new_instance()
         {
             using (mocks.Record())
@@ -168,7 +163,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             }
         }
 
-        [Test]
+        [Fact]
         public void Should_be_able_to_pass_parameters_to_the_constructor_of_the_Type()
         {
             using (mocks.Record())

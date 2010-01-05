@@ -5,15 +5,14 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
     using System.IO;
     using System.Threading;
     using Boo.Lang.Compiler;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
     public class DslFixtureIntegrationFixture
     {
         private readonly string path =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"DslFactoryFixture\Integration.boo");
 
-        [Test]
+        [Fact]
         public void When_file_is_changed_will_automatically_get_new_version()
         {
             DslFactory factory = new DslFactory();
@@ -23,7 +22,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
             
             DemoDslBase demo = factory.Create<DemoDslBase>(path);
             demo.Execute();
-            Assert.AreEqual("test", demo.Messages[0]);
+            Assert.Equal("test", demo.Messages[0]);
 
             File.WriteAllText(path,"log 'changed'");
         	for (int i = 0; i < 5; i++)
@@ -34,7 +33,7 @@ namespace Rhino.DSL.Tests.DslFactoryFixture
 				if(demo.Messages[0]=="changed")
 					break;
         	}
-			Assert.AreEqual("changed", demo.Messages[0]);
+			Assert.Equal("changed", demo.Messages[0]);
         }
     }
 

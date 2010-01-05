@@ -7,16 +7,15 @@ namespace Rhino.DSL.Tests
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Pipelines;
-	using MbUnit.Framework;
+	using Xunit;
 
-	public class BaseCompilerTestFixture
+	public class BaseCompilerTestFixture : IDisposable
 	{
 		protected StringWriter consoleOutput;
 		private TextWriter oldConsole;
 	    private string oldCurrentDir;
 
-	    [SetUp]
-		public virtual void SetUp()
+        public BaseCompilerTestFixture()
 		{
 		    oldCurrentDir = Environment.CurrentDirectory;
 	        Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -25,8 +24,7 @@ namespace Rhino.DSL.Tests
 			Console.SetOut(consoleOutput);
 		}
 
-		[TearDown]
-		public void TearDown()
+		public void Dispose()
 		{
 		    Environment.CurrentDirectory = oldCurrentDir;
 			Debug.WriteLine(consoleOutput.GetStringBuilder().ToString());

@@ -2,12 +2,11 @@ namespace Rhino.DSL.Tests
 {
     using System.Xml;
     using Boo.Lang.Compiler;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
     public class AutoImportTextFixture : BaseCompilerTestFixture
     {
-        [Test]
+        [Fact]
         public void Can_automatically_import_namespaces()
         {
             Compile("AutoImport.boo");

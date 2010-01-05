@@ -1,15 +1,14 @@
 namespace Rhino.DSL.Tests
 {
     using System;
-    using MbUnit.Framework;
+    using Xunit;
 
     public class BaseDslFixture<TDslEngine, TDslBase>
            where TDslEngine : DslEngine, new()
     {
         protected DslFactory factory;
 
-        [SetUp]
-        public void SetUp()
+        public BaseDslFixture()
         {
             factory = new DslFactory();
             factory.BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;

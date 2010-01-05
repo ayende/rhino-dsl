@@ -3,54 +3,51 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Boo.Lang.Compiler;
-using MbUnit.Framework;
+using Xunit;
 
 namespace Rhino.DSL.Tests
 {
-	[TestFixture]
 	public class MethodSubstitutionBaseClassTestFixture : BaseCompilerTestFixture
 	{
-		private Assembly assembly;
+		private readonly Assembly assembly;
 
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			assembly = Compile(@"MethodSubstitutionBaseClass.boo");
-		}
+	    public MethodSubstitutionBaseClassTestFixture()
+	    {
+            assembly = Compile(@"MethodSubstitutionBaseClass.boo");	        
+	    }
 
-		[Test]
+		[Fact]
 		public void CanCreateAnonymousBaseClass()
 		{
-			Assert.IsNotNull(assembly);
+			Assert.NotNull(assembly);
 		}
 
-		[Test]
+		[Fact]
 		public void WillCreateTypeWithSameNameAsFile()
 		{
-			Assert.IsNotNull(
+			Assert.NotNull(
 				assembly.GetType("MethodSubstitutionBaseClass")
 				);
 		}
 
-		[Test]
+		[Fact]
 		public void CanExecuteNewTypeAndGetCodeFromFile()
 		{
 			MyMethodSubstitutionBaseClass instance = (MyMethodSubstitutionBaseClass)assembly.CreateInstance("MethodSubstitutionBaseClass");
 			instance.SomeAbstractMethod();
 			instance.SomeVirtualMethod();
-			Assert.AreEqual("abstract" + Environment.NewLine + 
+			Assert.Equal("abstract" + Environment.NewLine + 
 				"virtual" + Environment.NewLine,
 				consoleOutput.GetStringBuilder().ToString());
 		}
 
-		[Test]
+		[Fact]
 		public void GlobalAssignmentExpressionStatementIsFieldOnType()
 		{
 			MyMethodSubstitutionBaseClass instance = (MyMethodSubstitutionBaseClass)assembly.CreateInstance("MethodSubstitutionBaseClass");
 
 			FieldInfo fi = instance.GetType().GetField("variableThatShouldBecomeAField", BindingFlags.NonPublic | BindingFlags.Instance);
-			Assert.IsNotNull(fi);
+			Assert.NotNull(fi);
 		}
 
 		protected override void AddCompilerSteps(BooCompiler compiler, string filename, CompilerPipeline pipeline)

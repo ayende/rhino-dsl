@@ -6,22 +6,21 @@ namespace Rhino.DSL.Tests
 	using Boo.Lang.Compiler;
 	using Boo.Lang.Compiler.IO;
 	using Boo.Lang.Compiler.Pipelines;
-	using MbUnit.Framework;
+	using Xunit;
 
-	[TestFixture]
 	public class AutoReferenceFilesCompilerStepFixure : BaseCompilerTestFixture
 	{
-		[Test]
+		[Fact]
 		public void CanAddFileReference()
 		{
 			Assembly asm = Compile(@"hasReferenceToAnotherFile.boo", CompilerOutputType.ConsoleApplication);
 
 			asm.EntryPoint.Invoke(null, new object[1] { null });
 
-			Assert.Contains(consoleOutput.GetStringBuilder().ToString(), "From second file");
+			Assert.Contains("From second file", consoleOutput.GetStringBuilder().ToString());
 		}
 
-		[Test]
+		[Fact]
 		public void CanAddImportsFromAnotherFile()
 		{
 
@@ -29,7 +28,7 @@ namespace Rhino.DSL.Tests
 
 			asm.EntryPoint.Invoke(null, new object[1] { null });
 
-			Assert.Contains(consoleOutput.GetStringBuilder().ToString(), "Marshal");
+            Assert.Contains("Marshal", consoleOutput.GetStringBuilder().ToString());
 	
 		}
 

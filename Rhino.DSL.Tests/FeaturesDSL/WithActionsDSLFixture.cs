@@ -1,40 +1,39 @@
 namespace Rhino.DSL.Tests.FeaturesDSL
 {
     using Boo.Lang.Compiler;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
     public class WithActionsDSLFixture : BaseDslFixture<WithActionsDslEngine,WithAction>
     {
-		[Test]
+		[Fact]
 		public void UsingWrongCase()
 		{
 			WithAction[] actions = factory.CreateAll<WithAction>(@"FeaturesDSL/hasAction.boo");
-			Assert.AreEqual(1, actions.Length);
+			Assert.Equal(1, actions.Length);
 		}
 
-        [Test]
+        [Fact]
         public void CanTryToCreateNonExistingScript()
         {
             WithAction action = factory.TryCreate<WithAction>(@"FeaturesDSL/DoesNotExists.boo");
-            Assert.IsNull(action);
+            Assert.Null(action);
         }
 
-        [Test]
+        [Fact]
         public void CanUseGeneratedProperty()
         {
             string action = base.factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo").Action;
-            Assert.AreEqual("/action/with/name", action);
+            Assert.Equal("/action/with/name", action);
         }
 
-        [Test]
+        [Fact]
         public void CanPassParametersViaCtor()
         {
             string name = base.factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo", "test ctor").Name;
-            Assert.AreEqual("test ctor", name);
+            Assert.Equal("test ctor", name);
         }
 
-        [Test]
+        [Fact]
         public void CanUseSymbols()
         {
             WithAction action = factory.Create<WithAction>(@"FeaturesDSL/HasAction.boo", "test ctor");

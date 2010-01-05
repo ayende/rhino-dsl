@@ -3,41 +3,38 @@ namespace Rhino.DSL.Tests
 	using System;
 	using System.Reflection;
 	using Boo.Lang.Compiler;
-	using MbUnit.Framework;
+	using Xunit;
 
-	[TestFixture]
 	public class AnonymousBaseClassTestFixture : BaseCompilerTestFixture
 	{
 		private Assembly assembly;
 
-		[SetUp]
-		public override void SetUp()
+        public AnonymousBaseClassTestFixture()
 		{
-			base.SetUp();
 			assembly = Compile(@"AnonymousBaseClass.boo");			
 		}
 
-		[Test]
+		[Fact]
 		public void CanCreateAnonymousBaseClass()
 		{
-			Assert.IsNotNull(this.assembly);
+			Assert.NotNull(this.assembly);
 		}
 
-		[Test]
+		[Fact]
 		public void WillCreateTypeWithSameNameAsFile()
 		{
-			Assert.IsNotNull(
+			Assert.NotNull(
 				assembly.GetType("AnonymousBaseClass")
 				);	
 		}
 
-		[Test]
+		[Fact]
 		public void CanExecuteNewTypeAndGetCodeFromFile()
 		{
 			MyAnonymousBaseClass instance = (MyAnonymousBaseClass)assembly.CreateInstance("AnonymousBaseClass");
 			instance.Run();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				"Hello from anonymous base class" + Environment.NewLine, 
 				consoleOutput.GetStringBuilder().ToString());
 		}
