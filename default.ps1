@@ -52,7 +52,10 @@ task Compile -depends Init {
 task Test -depends Compile {
   $old = pwd
   cd $build_dir
-  exec ".\MbUnit.Cons.exe" "$build_dir\Rhino.DSL.Tests.dll"
+  &.\MbUnit.Cons.exe /rf:$build_dir /rnf:TestResults /rt:Html "$build_dir\Rhino.Dsl.Tests.dll"
+  if ($lastExitCode -ne 0) {
+        throw "Error: Failed to execute tests"
+    }
   cd $old
 }
 
