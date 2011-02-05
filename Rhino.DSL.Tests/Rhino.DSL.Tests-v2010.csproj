@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9BCD2185-4653-45D7-99B2-3043E55A6746}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhino.DSL.Tests</RootNamespace>
+    <AssemblyName>Rhino.DSL.Tests</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1607</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\Boo.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="Boo.Lang.Compiler, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\Boo.Lang.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit, Version=1.1.0.1323, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\xunit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnonymousBaseClassTestFixture.cs" />
+    <None Include="AutoImport.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Include="AutoImportTextFixture.cs" />
+    <Compile Include="AutoReferenceFilesCompilerStepFixure.cs" />
+    <Compile Include="BaseCompilerTestFixture.cs" />
+    <Compile Include="BaseDslFixture.cs" />
+    <Compile Include="BlockToArgumentsTestFixture.cs" />
+    <Compile Include="ConsoleRecorder.cs" />
+    <Compile Include="DslFactoryFixture\DslEngineFixture.cs" />
+    <Compile Include="DslFactoryFixture\DslFactoryFixture.cs" />
+    <Compile Include="DslFactoryFixture\DslFixtureIntegrationFixture.cs" />
+    <Compile Include="ExternalDSL\DslExecuter.cs" />
+    <Compile Include="ExternalDSL\ExternalDSLFixture.cs" />
+    <Compile Include="ExternalDSL\ExternalDSLDemo.cs" />
+    <Compile Include="ExternalDSL\Parser.cs" />
+    <Compile Include="FeaturesDSL\WithActionsDSLFixture.cs" />
+    <Compile Include="MethodSubstitutionBaseClassTestFixture.cs" />
+    <Compile Include="OrderDSL\BaseOrderActionsDSL.cs" />
+    <Compile Include="OrderDSL\Order.cs" />
+    <Compile Include="OrderDSL\OrderActionsDslEngine.cs" />
+    <Compile Include="OrderDSL\OrderDSLFixture.cs" />
+    <Compile Include="OrderDSL\User.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchedulingDSL\BaseScheduler.cs" />
+    <Compile Include="SchedulingDSL\SchedulingDslEngine.cs" />
+    <Compile Include="SchedulingDSL\WebSite.cs" />
+    <Compile Include="TransformerCompilerStepTestFixture.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="anotherFile.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="hasReferenceToAnotherFile.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AnonymousBaseClass.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="anotherFile2.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="DslFactoryFixture\MyDsl.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DslFactoryFixture\ScriptWithParameter.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="FeaturesDSL\HasAction.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MethodSubstitutionBaseClass.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="namespacesImports.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderDSL\OrderBusinessRules_DifferentOperations.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderDSL\OrderBusinessRules.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="SchedulingDSL\ValidateWebSiteDown.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="SchedulingDSL\ValidateWebSiteUp.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rhino.DSL\Rhino.DSL-vs2010.csproj">
+      <Project>{B788F27C-E00A-434A-81AA-1D592E030934}</Project>
+      <Name>Rhino.DSL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Notes="&lt;Notes Project=&quot;9bcd2185-4653-45d7-99b2-3043e55a6746&quot; xmlns=&quot;clr-namespace:StickyNotes.Model;assembly=StickyNotes&quot;&gt;&lt;Notes.StickyNotes&gt;&lt;Note FilePath=&quot;&quot; Content=&quot;&quot; Date=&quot;2008-07-10T10:49:01.3179462-04:00&quot; /&gt;&lt;/Notes.StickyNotes&gt;&lt;/Notes&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

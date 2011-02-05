@@ -14,6 +14,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -131,7 +132,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rhino.DSL\Rhino.DSL.csproj">
+    <ProjectReference Include="..\Rhino.DSL\Rhino.DSL-vs2008.csproj">
       <Project>{B788F27C-E00A-434A-81AA-1D592E030934}</Project>
       <Name>Rhino.DSL</Name>
     </ProjectReference>

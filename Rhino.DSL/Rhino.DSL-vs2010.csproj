@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B788F27C-E00A-434A-81AA-1D592E030934}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhino.DSL</RootNamespace>
+    <AssemblyName>Rhino.DSL</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\ayende-open-source.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Rhino.DSL.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1607</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\Boo.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="Boo.Lang.Compiler, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\Boo.Lang.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Boo.Lang.Parser, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SharedLibs\Boo.Lang.Parser.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractLockable.cs" />
+    <Compile Include="BlockToArgumentsTransformer.cs" />
+    <Compile Include="DslCompilerContextCache.cs" />
+    <Compile Include="ImplicitBaseClassCompilerStep.cs" />
+    <Compile Include="BaseClassCompilerStep.cs" />
+    <Compile Include="DefaultDslEngineCache.cs" />
+    <Compile Include="FileSystemDslEngineStorage.cs" />
+    <Compile Include="IDslEngineCache.cs" />
+    <Compile Include="IDslEngineStorage.cs" />
+    <Compile Include="MethodSubstitutionBaseClassCompilerStep.cs" />
+    <Compile Include="TransformerCompilerStep.cs" />
+    <Compile Include="UnderscoreNamingConventionsToPascalCaseCompilerStep.cs" />
+    <Compile Include="UseSymbolsStep.cs" />
+    <Compile Include="AutoImportCompilerStep.cs" />
+    <Compile Include="AutoReferenceFilesCompilerStep.cs" />
+    <Compile Include="DslEngine.cs" />
+    <Compile Include="DslFactory.cs" />
+    <Compile Include="GeneratePropertyMacro.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ayende-open-source.snk">
+      <Link>ayende-open-source.snk</Link>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Notes="&lt;Notes Project=&quot;b788f27c-e00a-434a-81aa-1d592e030934&quot; xmlns=&quot;clr-namespace:StickyNotes.Model;assembly=StickyNotes&quot;&gt;&lt;Notes.StickyNotes&gt;&lt;Note FilePath=&quot;&quot; Content=&quot;&quot; Date=&quot;2008-07-02T15:01:02.2087309-04:00&quot; /&gt;&lt;/Notes.StickyNotes&gt;&lt;/Notes&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
