@@ -188,9 +188,7 @@ namespace Rhino.DSL
 
 		private Assembly CompileAssembly(Node node, string url, CompilerErrorCollection errors)
 		{
-		    CompilerContext oldContext = Context;
 		    CompilerContext result = Compile(url);
-		    _context = oldContext;
 			if (result.Errors.Count > 0)
 			{
 				errors.Add(new CompilerError(node.LexicalInfo, "Failed to add a file reference"));
@@ -231,7 +229,10 @@ namespace Rhino.DSL
 			// cloned.Input - we don't want to copy that
 			cloned.KeyContainer = parameters.KeyContainer;
 			cloned.KeyFile = parameters.KeyFile;
-			cloned.LibPaths.AddRange(parameters.LibPaths);
+		    foreach (var libPath in parameters.LibPaths)
+		    {
+		        cloned.LibPaths.Add(libPath);
+		    }
 			// cloned.OutputAssembly - we don't want that either
 
 			// always want that, since we are compiling to add a reference
@@ -252,5 +253,13 @@ namespace Rhino.DSL
 		{
 			Visit(CompileUnit);
 		}
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public override void Dispose()
+        {
+            // Do nothing on dispose since we want to keep the Context through multiple pipeline runs.
+        }
 	}
 }

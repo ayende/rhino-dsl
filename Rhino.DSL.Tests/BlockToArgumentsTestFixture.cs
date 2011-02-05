@@ -13,14 +13,14 @@ namespace Rhino.DSL.Tests
 
 			MacroStatement fixture = new MacroStatement(new LexicalInfo("test", 1, 1));
 			fixture.Name = "DoStuff";
-			fixture.Block = new Block();
-			fixture.Block.Add(doStuffStatement);
+			fixture.Body = new Block();
+			fixture.Body.Add(doStuffStatement);
 
 			BlockToArgumentsTransformer transformer = new BlockToArgumentsTransformer("DoStuff");
 			transformer.Visit(fixture);
 
 			Assert.Equal(exp, fixture.Arguments[0]);
-			Assert.False(fixture.Block.HasStatements, "MacroStatement block should be empty after transformation.");
+			Assert.True(fixture.Body.IsEmpty, "MacroStatement block should be empty after transformation.");
 		}
 
 		[Fact]
