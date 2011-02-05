@@ -80,7 +80,7 @@ namespace Rhino.DSL
 						mie.Target = new ReferenceExpression(macroStatement.LexicalInfo, macroStatement.Name);
 						mie.Arguments = macroStatement.Arguments;
 
-						if (macroStatement.Block.IsEmpty == false)
+						if (macroStatement.Body.IsEmpty == false)
 						{
 							// If the macro statement has a block,                      
 							// transform it into a block expression and pass that as the last argument                     
