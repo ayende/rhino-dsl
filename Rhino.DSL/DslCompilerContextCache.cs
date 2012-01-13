@@ -94,8 +94,9 @@ namespace Rhino.DSL
 				{
 					WriteLock(delegate
 					{
-						byte[] bytes = File.ReadAllBytes(file);
-						assembly = Assembly.Load(bytes);
+						// Use Assembly.LoadFrom so that Fusion tries to resolve
+						// any assembly dependencies.
+						assembly = Assembly.LoadFrom(file);
 						assemblyCache[file] = assembly;
 						AssemblyLoaded(file, assembly, true);
 					});
